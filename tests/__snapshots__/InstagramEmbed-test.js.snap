@@ -1,0 +1,8 @@
+exports[`InstagramEmbed Render 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": null,
+    }
+  } />
+`;

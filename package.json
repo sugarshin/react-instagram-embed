@@ -1,0 +1,74 @@
+{
+  "name": "react-instagram-embed",
+  "version": "1.0.0",
+  "description": "React embedding Instagram posts component",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "babel -d lib src",
+    "check": "npm run lint && npm run flow && npm test",
+    "lint": "eslint src",
+    "test": "jest",
+    "flow": "flow",
+    "docs": "npm run predocs && NODE_ENV=docs webpack",
+    "clean:docs": "if [ -d docs ]; then rm -rf docs; fi",
+    "predocs": "npm run clean:docs; mkdir docs && npm run favicon",
+    "favicon": "curl https://sugarshin.net/favicon.ico > docs/favicon.ico",
+    "prepublish": "npm run check && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sugarshin/react-instagram-embed.git"
+  },
+  "author": "sugarshin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sugarshin/react-instagram-embed/issues"
+  },
+  "homepage": "https://github.com/sugarshin/react-instagram-embed#readme",
+  "peerDependencies": {
+    "react": "^15.0.0 || ~0.14.0",
+    "react-dom": "^15.0.0 || ~0.14.0"
+  },
+  "dependencies": {
+    "jsonp-promise": "^0.1.2",
+    "query-string": "^4.2.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-jest": "^16.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-class-properties": "^6.16.0",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.8.1",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-flowtype": "^2.20.0",
+    "eslint-plugin-react": "^6.4.1",
+    "flow-bin": "^0.33.0",
+    "html-webpack-plugin": "^2.24.0",
+    "insert-css": "^1.0.0",
+    "insert-stylesheet": "^0.1.0",
+    "jest": "^16.0.2",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-ghfork": "^0.3.5",
+    "react-hot-loader": "3.0.0-beta.6",
+    "react-test-renderer": "^15.3.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "jest": {
+    "testRegex": "/tests/.*-test\\.js$"
+  }
+}
