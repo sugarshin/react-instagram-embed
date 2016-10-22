@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pkg = require('./package.json')
 
 const PORT = process.env.PORT || 8080
-const docs = process.env.NODE_ENV === 'docs'
+const docs = process.env.NODE_ENV === 'production'
 
 const htmlWebpackPluginConfig = {
   title: `${pkg.name} | ${pkg.description}`,
@@ -17,6 +17,11 @@ const entry = [
 ]
 
 const plugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    },
+  }),
   new HtmlWebpackPlugin(docs ? htmlWebpackPluginConfig : undefined),
 ]
 
@@ -28,6 +33,12 @@ if (!docs) {
   )
   plugins.unshift(
     new webpack.HotModuleReplacementPlugin()
+  )
+}
+
+if (docs) {
+  plugins.push(
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
   )
 }
 
