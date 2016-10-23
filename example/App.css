@@ -1,0 +1,40 @@
+html, :root {
+  font-size: 62.5%;
+}
+html, :root, body {
+  background-color: #fafafa;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Roboto, "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic Pro", Meiryo, "メイリオ", "Noto Sans Japanese", sans-serif;
+}
+body {
+  color: #323b43;
+  line-height: 1.6;
+  font-size: 1.4rem;
+}
+h1 {
+  margin-top: 0;
+  text-align: center;
+}
+.body {
+  margin: 0 auto;
+  padding: 1em .5em;
+}
+.instagram-embed {
+  min-height: 390px;
+}
+.instagram-embed + .ui {
+  margin-top: 1em;
+}
+.ui {
+  margin-top: .5em;
+}
+.ui-label {
+  margin-right: 1em;
+}
+pre {
+  background-color: #eee;
+  padding: 1em;
+}
+.hljs {
+  background-color: #eee;
+}

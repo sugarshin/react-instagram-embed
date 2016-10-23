@@ -31,12 +31,10 @@ if (!docs) {
     'webpack/hot/only-dev-server',
     'react-hot-loader/patch'
   )
-  plugins.unshift(
+  plugins.push(
     new webpack.HotModuleReplacementPlugin()
   )
-}
-
-if (docs) {
+} else {
   plugins.push(
     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
   )
@@ -70,4 +68,4 @@ module.exports = {
     host: '0.0.0.0',
     port: PORT,
   },
-};
+}

@@ -1,85 +1,60 @@
+import 'highlight.js/styles/github.css'
+import 'react-ghfork/gh-fork-ribbon.ie.css'
+import 'react-ghfork/gh-fork-ribbon.css'
+import './App.css'
 import React, { Component } from 'react'
 import Fork from 'react-ghfork'
-import insertStylesheet from 'insert-stylesheet'
-import insertCSS from 'insert-css'
+import hljs from 'highlight.js'
 import InstagramEmbed from '../src'
 
-insertStylesheet('https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css')
-require('react-ghfork/gh-fork-ribbon.ie.css')
-require('react-ghfork/gh-fork-ribbon.css')
-insertCSS(`
-  html, :root {
-    font-size: 62.5%;
-  }
-  html, :root, body {
-    background-color: #fafafa;
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Roboto, "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic Pro", Meiryo, "メイリオ", "Noto Sans Japanese", sans-serif;
-  }
-  body {
-    color: #323b43;
-    line-height: 1.6;
-    font-size: 1.4rem;
-  }
-  h1 {
-    margin-top: 0;
-    padding-top: 1em;
-  }
-`, { prepend: false })
-
 export default class App extends Component {
+  state = { url: urls[0], maxWidth: 320, hideCaption: true }
   constructor(props) {
     super(props)
-    this.state = {
-      url: urls[0],
-      maxWidth: 320,
-      hideCaption: true,
-    }
+  }
+  componentDidMount() {
+    Array.from(document.querySelectorAll('pre code')).forEach(el => hljs.highlightBlock(el))
   }
   render() {
     return (
       <div>
         <Fork project='sugarshin/react-instagram-embed' className='right' />
-        <div style={{
-          width: this.state.maxWidth ? this.state.maxWidth : 'auto',
-          margin: '0 auto',
-        }}>
+        <div className='body' style={{ maxWidth: this.state.maxWidth ? this.state.maxWidth : 'auto' }}>
           <h1>React Instagram Embed</h1>
           <InstagramEmbed
-            style={{ minHeight: 390 }}
+            className='instagram-embed'
             url={this.state.url}
             maxWidth={this.state.maxWidth}
             hideCaption={this.state.hideCaption}
           />
-          <div style={{
-            marginTop: '1em',
-          }}>
-            <span>Show caption</span>
+          <div className='ui'>
+            <span className='ui-label'>Show caption</span>
             <input type='checkbox' value={this.state.hideCaption} onChange={this.handleChange} />
           </div>
-          <div>
-            <span>Max width</span>
+          <div className='ui'>
+            <span className='ui-label'>Max width</span>
             <input type='number' defaultValue={this.state.maxWidth} min={320} ref={el => this.number = el} />
             <button onClick={this.handleMaxWidthChange}>Change</button>
           </div>
-          <div>
-            <span>Select photo</span>
+          <div className='ui'>
+            <span className='ui-label'>Select photo</span>
             <select value={this.state.url} onChange={this.hanldeURLSelect}>
               {urls.map(u => <option value={u} key={u}>{u}</option>)}
             </select>
           </div>
-          <pre style={{
-            backgroundColor: '#eee',
-            padding: '1em'
-          }}>
-            <code>{`<InstagramEmbed
+          <pre>
+            <code>
+              {
+`<InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'
   maxWidth={320}
   hideCaption
   onLoading={() => {}}
   onSuccess={() => {}}
   onFailure={() => {}}
-/>`}</code>
+/>`
+              }
+            </code>
           </pre>
         </div>
       </div>
