@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import jsonp from 'jsonp-promise'
+import jsonp from 'jsonp-p'
 import qs from 'query-string'
 
 export type Props = {
@@ -16,8 +16,8 @@ export default class InstagramEmbed extends Component {
   props: Props
   state: { __html: ?string }
 
-  static defaultProps: { hideCaption: boolean, containerTagName: string };
-  static defaultProps = { hideCaption: false, containerTagName: 'div' };
+  static defaultProps: { hideCaption: boolean, containerTagName: string }
+  static defaultProps = { hideCaption: false, containerTagName: 'div' }
 
   state = { __html: null }
 
@@ -85,7 +85,7 @@ export default class InstagramEmbed extends Component {
           } else {
             checkAPI(_this)
           }
-        }, 10)
+        }, 20)
       })(this)
     })
   }
@@ -119,4 +119,7 @@ export default class InstagramEmbed extends Component {
     clearTimeout(this._timer)
     this.props.onFailure && this.props.onFailure(...args)
   }
+
+  // Public
+  cancel = () => this.jsonp.cancel()
 }

@@ -23,6 +23,7 @@ import InstagramEmbed from 'react-instagram-embed';
   url='https://instagr.am/p/Zw9o4/'
   maxWidth={320}
   hideCaption
+  containerTagName='div'
   onLoading={() => {}}
   onSuccess={() => {}}
   onFailure={() => {}}
@@ -34,6 +35,7 @@ import InstagramEmbed from 'react-instagram-embed';
 - `url` {String} Instagram URL. Required
 - `maxWidth` {Number} Max width. Minimum size is `320`. Default `undefined`
 - `hideCaption` {Boolean} Default `false`
+- `containerTagName` {String} Default `div`
 - `onLoading` {Function}
 - `onSuccess` {Function}
 - `onFailure` {Function}
