@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "test": "jest",
     "flow": "flow",
-    "docs": "npm run predocs && NODE_ENV=production webpack",
+    "docs": "NODE_ENV=production webpack",
     "clean:docs": "if [ -d docs ]; then rm -rf docs; fi",
     "predocs": "npm run clean:docs; mkdir docs && npm run favicon",
     "favicon": "curl https://sugarshin.net/favicon.ico > docs/favicon.ico",
