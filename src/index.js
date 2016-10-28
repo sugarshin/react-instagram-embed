@@ -26,12 +26,13 @@ export default class InstagramEmbed extends Component {
   }
 
   componentDidMount() {
-    if (window.instgrm) {
+    if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
       this.fetchEmbed(this.getQueryParams(this.props));
     } else {
       const s = document.createElement('script')
       s.async = s.defer = true
       s.src = '//platform.instagram.com/en_US/embeds.js'
+      s.id = 'react-instagram-embed-script'
       document.body.appendChild(s)
       this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
     }
