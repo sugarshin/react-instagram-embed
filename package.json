@@ -6,6 +6,11 @@
   "files": [
     "lib"
   ],
+  "keywords": [
+    "react",
+    "component",
+    "instagram"
+  ],
   "scripts": {
     "start": "webpack-dev-server --progress",
     "clean:lib": "if [ -d lib ]; then rm -rf lib; fi",
