@@ -16,7 +16,7 @@
     "test": "jest",
     "flow": "flow",
     "clean:build": "if [ -d build ]; then rm -rf build; fi",
-    "favicon": "curl https://sugarshin.net/favicon.ico > docs/favicon.ico",
+    "favicon": "curl https://sugarshin.net/favicon.ico > build/favicon.ico",
     "preghpages": "npm run clean:build; mkdir -p build && npm run favicon",
     "ghpages": "NODE_ENV=production webpack --progress",
     "postghpages": "gh-pages -x -m 'Update [ci skip]' -d build -r https://github.com/sugarshin/react-instagram-embed.git",
