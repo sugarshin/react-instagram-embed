@@ -1,0 +1,16 @@
+machine:
+  timezone: Asia/Tokyo
+  node:
+    version: 6.9.1
+
+dependencies:
+  pre:
+    - npm update -g npm
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - git config --global user.name "CircleCI"
+      - git config --global user.email "s+circleci@sugarshin.net"
+      - npm run ghpages

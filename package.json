@@ -7,17 +7,20 @@
     "lib"
   ],
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "babel -d lib src",
+    "start": "webpack-dev-server --progress",
+    "clean:lib": "if [ -d lib ]; then rm -rf lib; fi",
+    "precompile": "npm run clean:lib; mkdir -p lib",
+    "compile": "babel -d lib src",
     "check": "npm run lint && npm run flow && npm test",
-    "lint": "eslint src",
+    "lint": "eslint src tests",
     "test": "jest",
     "flow": "flow",
-    "docs": "NODE_ENV=production webpack",
-    "clean:docs": "if [ -d docs ]; then rm -rf docs; fi",
-    "predocs": "npm run clean:docs; mkdir docs && npm run favicon",
+    "clean:build": "if [ -d build ]; then rm -rf build; fi",
     "favicon": "curl https://sugarshin.net/favicon.ico > docs/favicon.ico",
-    "prepublish": "npm run check && npm run build"
+    "preghpages": "npm run clean:build; mkdir -p build && npm run favicon",
+    "ghpages": "NODE_ENV=production webpack --progress",
+    "postghpages": "gh-pages -x -m 'Update [ci skip]' -d build -r https://github.com/sugarshin/react-instagram-embed.git",
+    "prepublish": "npm run check && npm run compile"
   },
   "repository": {
     "type": "git",
@@ -55,6 +58,7 @@
     "eslint-plugin-flowtype": "^2.25.0",
     "eslint-plugin-react": "^6.4.1",
     "flow-bin": "^0.34.0",
+    "gh-pages": "^0.11.0",
     "highlight.js": "^9.7.0",
     "html-webpack-plugin": "^2.24.1",
     "insert-stylesheet": "^0.1.0",
