@@ -8,7 +8,7 @@ const docs = process.env.NODE_ENV === 'production'
 const htmlWebpackPluginConfig = {
   title: `${pkg.name} | ${pkg.description}`,
   minify: { collapseWhitespace: true },
-  favicon: 'docs/favicon.ico',
+  favicon: 'build/favicon.ico',
 }
 
 const entry = [
