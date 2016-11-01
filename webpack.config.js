@@ -25,7 +25,11 @@ const plugins = [
   new HtmlWebpackPlugin(docs ? htmlWebpackPluginConfig : undefined),
 ]
 
-if (!docs) {
+if (docs) {
+  plugins.push(
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false, screw_ie8: true } })
+  )
+} else {
   entry.unshift(
     `webpack-dev-server/client?http://localhost:${PORT}`,
     'webpack/hot/only-dev-server',
@@ -34,10 +38,6 @@ if (!docs) {
   plugins.push(
     new webpack.HotModuleReplacementPlugin()
   )
-} else {
-  plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-  )
 }
 
 module.exports = {
@@ -45,7 +45,7 @@ module.exports = {
   entry,
   cache: true,
   output: {
-    path: 'docs',
+    path: 'build',
     filename: 'bundle.js',
   },
   module: {

@@ -1,6 +1,6 @@
 # react-instagram-embed
 
-[![Build Status][travis-image]][travis-url]
+[![CircleCI][circleci-image]][circleci-url]
 [![Dependency Status][david-image]][david-url]
 [![Devdependency Status][david-dev-image]][david-dev-url]
 [![npm version][npm-image]][npm-url]
@@ -17,7 +17,7 @@ npm i react-instagram-embed
 ## Usage
 
 ```js
-import InstagramEmbed from 'react-instagram-embed';
+import InstagramEmbed from 'react-instagram-embed'
 
 <InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'
@@ -56,8 +56,8 @@ import InstagramEmbed from 'react-instagram-embed';
 
 [npm-image]: https://img.shields.io/npm/v/react-instagram-embed.svg?style=flat-square
 [npm-url]: https://www.npmjs.org/package/react-instagram-embed
-[travis-image]: https://img.shields.io/travis/sugarshin/react-instagram-embed/master.svg?branch=master&style=flat-square
-[travis-url]: https://travis-ci.org/sugarshin/react-instagram-embed
+[circleci-image]: https://circleci.com/gh/sugarshin/react-instagram-embed/tree/master.svg?style=svg&circle-token=8991301b0db526852c58dc884a349cb8e00f1b24
+[circleci-url]: https://circleci.com/gh/sugarshin/react-instagram-embed/tree/master
 [david-image]: https://david-dm.org/sugarshin/react-instagram-embed.svg?style=flat-square
 [david-url]: https://david-dm.org/sugarshin/react-instagram-embed
 [david-dev-image]: https://david-dm.org/sugarshin/react-instagram-embed/dev-status.svg?style=flat-square
