@@ -1,4 +1,9 @@
 {
   "presets": ["es2015", "react"],
-  "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"]
+  "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"],
+  "env": {
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    }
+  }
 }
