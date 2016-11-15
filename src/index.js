@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { Component } from 'react'
 import jsonp from 'jsonp-p'
 import qs from 'query-string'
@@ -11,19 +13,19 @@ export type Props = {
   onSuccess: () => void,
   onFailure: () => void,
 }
+type State = { __html: ?string }
+type QueryParams = { url: string, hideCaption: ?boolean, maxWidth: ?number }
 
 export default class InstagramEmbed extends Component {
   props: Props
-  state: { __html: ?string }
+  state: State
+  jsonp: { promise: Promise<any>, cancel: () => void }
+  _timer: number
 
   static defaultProps: { hideCaption: boolean, containerTagName: string }
   static defaultProps = { hideCaption: false, containerTagName: 'div' }
 
   state = { __html: null }
-
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
     if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
@@ -38,7 +40,7 @@ export default class InstagramEmbed extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { url, hideCaption, maxWidth, containerTagName } = this.props
     if (nextProps.url !== url ||
         nextProps.hideCaption !== hideCaption ||
@@ -49,7 +51,7 @@ export default class InstagramEmbed extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
     const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure } = this.props
     const { __html } = this.state
     if (nextProps.url !== url ||
@@ -70,13 +72,13 @@ export default class InstagramEmbed extends Component {
       dangerouslySetInnerHTML={{ __html: this.state.__html }} {...this.omitComponentProps()} />
   }
 
-  omitComponentProps() {
+  omitComponentProps(): Object {
     // eslint-disable-next-line no-unused-vars
     const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure, ...rest } = this.props
     return rest
   }
 
-  checkAPI() {
+  checkAPI(): Promise<any> {
     return new Promise(resolve => {
       (function checkAPI(_this) {
         _this._timer = setTimeout(() => {
@@ -91,7 +93,7 @@ export default class InstagramEmbed extends Component {
     })
   }
 
-  fetchEmbed(queryParams) {
+  fetchEmbed(queryParams: string) {
     this.jsonp = jsonp(`https://api.instagram.com/oembed/?${queryParams}`)
     this.props.onLoading && this.props.onLoading()
     this.jsonp.promise
@@ -99,16 +101,16 @@ export default class InstagramEmbed extends Component {
       .catch(this.handleFetchFailure)
   }
 
-  getQueryParams({ url, hideCaption, maxWidth }) {
+  getQueryParams({ url, hideCaption, maxWidth }: QueryParams): string {
     return qs.stringify({
       url,
       hidecaption: hideCaption,
-      maxwidth: maxWidth >= 320 ? maxWidth : undefined,
+      maxwidth: typeof maxWidth === 'number' && maxWidth >= 320 ? maxWidth : undefined,
       omitscript: true,
     });
   }
 
-  handleFetchSuccess = response => {
+  handleFetchSuccess = (response: Object) => {
     this.props.onSuccess && this.props.onSuccess(response)
     this.setState(
       { __html: response.html },
@@ -116,7 +118,7 @@ export default class InstagramEmbed extends Component {
     )
   }
 
-  handleFetchFailure = (...args) => {
+  handleFetchFailure = (...args: any) => {
     clearTimeout(this._timer)
     this.props.onFailure && this.props.onFailure(...args)
   }
