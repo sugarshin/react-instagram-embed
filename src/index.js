@@ -93,7 +93,7 @@ export default class InstagramEmbed extends Component {
     })
   }
 
-  fetchEmbed(queryParams: string) {
+  fetchEmbed(queryParams: string): void {
     this.jsonp = jsonp(`https://api.instagram.com/oembed/?${queryParams}`)
     this.props.onLoading && this.props.onLoading()
     this.jsonp.promise
@@ -110,7 +110,7 @@ export default class InstagramEmbed extends Component {
     });
   }
 
-  handleFetchSuccess = (response: Object) => {
+  handleFetchSuccess = (response: Object): void => {
     this.props.onSuccess && this.props.onSuccess(response)
     this.setState(
       { __html: response.html },
@@ -118,11 +118,11 @@ export default class InstagramEmbed extends Component {
     )
   }
 
-  handleFetchFailure = (...args: any) => {
+  handleFetchFailure = (...args: any): void => {
     clearTimeout(this._timer)
     this.props.onFailure && this.props.onFailure(...args)
   }
 
   // Public
-  cancel = () => this.jsonp.cancel()
+  cancel = (): void => this.jsonp.cancel()
 }
