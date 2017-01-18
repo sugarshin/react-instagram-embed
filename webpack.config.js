@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pkg = require('./package.json')
@@ -45,19 +46,19 @@ module.exports = {
   entry,
   cache: true,
   output: {
-    path: 'build',
+    path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
+        loader: 'babel-loader',
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css?minimize'],
+        use: ['style-loader', { loader: 'css-loader', options: { minimize: true } }],
       },
     ],
   },
@@ -66,6 +67,6 @@ module.exports = {
     hot: true,
     publicPath: '/',
     host: '0.0.0.0',
-    port: PORT,
+    port: parseInt(PORT, 10),
   },
 }
