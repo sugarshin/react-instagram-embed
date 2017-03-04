@@ -28,6 +28,10 @@ h1 {
 .ui {
   margin-top: .5em;
 }
+.ui input[type=number] {
+  max-width: 128px;
+  margin-right: 1em;
+}
 .ui-label {
   margin-right: 1em;
 }
