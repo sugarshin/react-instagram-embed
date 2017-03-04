@@ -49,6 +49,7 @@ export default class App extends Component {
   url='https://instagr.am/p/Zw9o4/'
   maxWidth={320}
   hideCaption
+  protocol=''
   onLoading={() => {}}
   onSuccess={() => {}}
   onFailure={() => {}}

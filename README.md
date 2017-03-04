@@ -19,15 +19,7 @@ npm i react-instagram-embed
 ```js
 import InstagramEmbed from 'react-instagram-embed'
 
-<InstagramEmbed
-  url='https://instagr.am/p/Zw9o4/'
-  maxWidth={320}
-  hideCaption
-  containerTagName='div'
-  onLoading={() => {}}
-  onSuccess={() => {}}
-  onFailure={() => {}}
-/>
+<InstagramEmbed url='https://instagr.am/p/Zw9o4/' />
 ```
 
 ## props
@@ -36,6 +28,8 @@ import InstagramEmbed from 'react-instagram-embed'
 - `maxWidth` {Number} Max width. Minimum size is `320`. Default `undefined`
 - `hideCaption` {Boolean} Default `false`
 - `containerTagName` {String} Default `div`
+- `protocol` {String} Instagram API script protocol. Default `''` same as current protocol
+  - This property needed if you use device's file system, for example, Electron, Cordova apps
 - `onLoading` {Function}
 - `onSuccess` {Function}
 - `onFailure` {Function}
