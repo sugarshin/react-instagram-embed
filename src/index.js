@@ -12,6 +12,7 @@ export type Props = {
   onLoading: () => void,
   onSuccess: () => void,
   onFailure: () => void,
+  protocol: string,
 }
 type State = { __html: ?string }
 type QueryParams = { url: string, hideCaption: ?boolean, maxWidth: ?number }
@@ -22,8 +23,8 @@ export default class InstagramEmbed extends Component {
   jsonp: { promise: Promise<any>, cancel: () => void }
   _timer: number
 
-  static defaultProps: { hideCaption: boolean, containerTagName: string }
-  static defaultProps = { hideCaption: false, containerTagName: 'div' }
+  static defaultProps: { hideCaption: boolean, containerTagName: string, protocol: string }
+  static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:' }
 
   state = { __html: null }
 
@@ -31,9 +32,13 @@ export default class InstagramEmbed extends Component {
     if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
       this.fetchEmbed(this.getQueryParams(this.props));
     } else {
+      const protocolToUse = window.location.protocol.indexOf('file') === 0
+        ? this.props.protocol
+        : ''
+
       const s = document.createElement('script')
       s.async = s.defer = true
-      s.src = '//platform.instagram.com/en_US/embeds.js'
+      s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
       s.id = 'react-instagram-embed-script'
       document.body.appendChild(s)
       this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
@@ -74,7 +79,7 @@ export default class InstagramEmbed extends Component {
 
   omitComponentProps(): Object {
     // eslint-disable-next-line no-unused-vars
-    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure, ...rest } = this.props
+    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure, protocol, ...rest } = this.props
     return rest
   }
 
