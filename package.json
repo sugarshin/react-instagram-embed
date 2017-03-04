@@ -3,8 +3,11 @@
   "version": "1.1.3",
   "description": "React embedding Instagram posts component",
   "main": "lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "keywords": [
     "react",
@@ -14,8 +17,11 @@
   "scripts": {
     "start": "webpack-dev-server --progress",
     "clean:lib": "if [ -d lib ]; then rm -rf lib; fi",
-    "precompile": "npm run clean:lib; mkdir -p lib",
-    "compile": "BABEL_ENV=production babel -d lib src",
+    "clean:es": "if [ -d es ]; then rm -rf es; fi",
+    "precompile": "npm run clean:lib; npm run clean:es; mkdir -p lib; mkdir -p es",
+    "compile:commonjs": "BABEL_ENV=commonjs babel -d lib src",
+    "compile:es": "BABEL_ENV=es babel -d es src",
+    "compile": "npm run compile:commonjs && npm run compile:es",
     "check": "npm run lint && npm run type && npm test",
     "lint": "eslint src tests",
     "test": "jest",
