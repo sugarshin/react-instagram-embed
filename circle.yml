@@ -1,17 +1,16 @@
 machine:
   timezone: Asia/Tokyo
   node:
-    version: 6.9.4
+    version: 6.10.0
   post:
     - curl -o- -L https://yarnpkg.com/install.sh | bash
 dependencies:
   pre:
     - yarn --version
-    - npm update -g npm
   override:
     - yarn
   cache_directories:
-    - "~/.cache/yarn"
+    - ~/.cache/yarn
 deployment:
   master:
     branch: master
