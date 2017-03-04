@@ -6,16 +6,16 @@ import qs from 'query-string'
 
 export type Props = {
   url: string,
-  hideCaption: ?boolean,
-  maxWidth: ?number,
-  containerTagName: ?string,
+  hideCaption: boolean,
+  maxWidth: number,
+  containerTagName: string,
   onLoading: () => void,
   onSuccess: () => void,
   onFailure: () => void,
   protocol: string,
 }
 type State = { __html: ?string }
-type QueryParams = { url: string, hideCaption: ?boolean, maxWidth: ?number }
+type QueryParams = { url: string, hideCaption: boolean, maxWidth: number }
 
 export default class InstagramEmbed extends Component {
   props: Props
@@ -23,7 +23,6 @@ export default class InstagramEmbed extends Component {
   jsonp: { promise: Promise<any>, cancel: () => void }
   _timer: number
 
-  static defaultProps: { hideCaption: boolean, containerTagName: string, protocol: string }
   static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:' }
 
   state = { __html: null }
