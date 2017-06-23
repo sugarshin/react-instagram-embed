@@ -121,8 +121,8 @@ export default class InstagramEmbed extends Component {
     this.setState(
       { __html: response.html },
       () => window.instgrm.Embeds.process()
+            this.props.onAfterRender && this.props.onAfterRender(response)
     )
-    this.props.onAfterRender && this.props.onAfterRender(response)
   }
 
   handleFetchFailure = (...args: any): void => {
