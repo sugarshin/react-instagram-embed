@@ -11,6 +11,7 @@ export type Props = {
   containerTagName: string,
   onLoading: () => void,
   onSuccess: () => void,
+  onAfterRender: () => void,
   onFailure: () => void,
   protocol: string,
 }
@@ -56,7 +57,7 @@ export default class InstagramEmbed extends Component {
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure } = this.props
+    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender onFailure } = this.props
     const { __html } = this.state
     if (nextProps.url !== url ||
         nextProps.hideCaption !== hideCaption ||
@@ -64,6 +65,7 @@ export default class InstagramEmbed extends Component {
         nextProps.containerTagName !== containerTagName ||
         nextProps.onLoading !== onLoading ||
         nextProps.onSuccess !== onSuccess ||
+        nextProps.onAfterRender !== onAfterRender ||
         nextProps.onFailure !== onFailure ||
         nextState.__html !== __html) {
       return true
@@ -78,7 +80,7 @@ export default class InstagramEmbed extends Component {
 
   omitComponentProps(): Object {
     // eslint-disable-next-line no-unused-vars
-    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onFailure, protocol, ...rest } = this.props
+    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure, protocol, ...rest } = this.props
     return rest
   }
 
@@ -115,11 +117,12 @@ export default class InstagramEmbed extends Component {
   }
 
   handleFetchSuccess = (response: Object): void => {
+    this.props.onSuccess && this.props.onSuccess(response)
     this.setState(
       { __html: response.html },
       () => window.instgrm.Embeds.process()
     )
-    this.props.onSuccess && this.props.onSuccess(response)
+    this.props.onAfterRender && this.props.onAfterRender(response)
   }
 
   handleFetchFailure = (...args: any): void => {
