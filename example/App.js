@@ -8,7 +8,7 @@ import hljs from 'highlight.js'
 import InstagramEmbed from '../src'
 
 export default class App extends Component {
-  state = { url: urls[0], maxWidth: 320, hideCaption: true }
+  state = { url: urls[0], maxWidth: 320, hideCaption: false }
   constructor(props) {
     super(props)
   }
@@ -48,7 +48,7 @@ export default class App extends Component {
 `<InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'
   maxWidth={320}
-  hideCaption
+  hideCaption={false}
   containerTagName='div'
   protocol=''
   onLoading={() => {}}

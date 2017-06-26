@@ -10,7 +10,7 @@ export type Props = {
   maxWidth: number,
   containerTagName: string,
   onLoading: () => void,
-  onSuccess: () => void,
+  onSuccess: (response: Object) => void,
   onAfterRender: () => void,
   onFailure: () => void,
   protocol: string,
@@ -32,7 +32,7 @@ export default class InstagramEmbed extends Component {
     if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
       this.fetchEmbed(this.getQueryParams(this.props));
     } else {
-      const protocolToUse = window.location.protocol.indexOf('file') === 0
+      const protocolToUse: string = window.location.protocol.indexOf('file') === 0
         ? this.props.protocol
         : ''
 
@@ -40,7 +40,10 @@ export default class InstagramEmbed extends Component {
       s.async = s.defer = true
       s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
       s.id = 'react-instagram-embed-script'
-      document.body.appendChild(s)
+      const body: HTMLElement | null = document.body
+      if (body) {
+        body.appendChild(s)
+      }
       this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
     }
   }
@@ -74,8 +77,7 @@ export default class InstagramEmbed extends Component {
   }
 
   render() {
-    return <this.props.containerTagName
-      dangerouslySetInnerHTML={{ __html: this.state.__html }} {...this.omitComponentProps()} />
+    return <this.props.containerTagName {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.__html }} />
   }
 
   omitComponentProps(): Object {
