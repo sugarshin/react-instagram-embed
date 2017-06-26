@@ -57,7 +57,7 @@ export default class InstagramEmbed extends Component {
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender onFailure } = this.props
+    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure } = this.props
     const { __html } = this.state
     if (nextProps.url !== url ||
         nextProps.hideCaption !== hideCaption ||
@@ -120,8 +120,10 @@ export default class InstagramEmbed extends Component {
     this.props.onSuccess && this.props.onSuccess(response)
     this.setState(
       { __html: response.html },
-      () => window.instgrm.Embeds.process()
-            this.props.onAfterRender && this.props.onAfterRender(response)
+      () => {
+        window.instgrm.Embeds.process()
+        this.props.onAfterRender && this.props.onAfterRender()
+      }
     )
   }
 
