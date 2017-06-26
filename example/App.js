@@ -53,6 +53,7 @@ export default class App extends Component {
   protocol=''
   onLoading={() => {}}
   onSuccess={() => {}}
+  onAfterRender={() => {}}
   onFailure={() => {}}
 />`
               }
