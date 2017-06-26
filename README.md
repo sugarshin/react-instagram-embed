@@ -8,7 +8,11 @@
 
 React embedding Instagram posts component
 
-```sh
+```bash
+yarn add react-instagram-embed
+
+# or
+
 npm i react-instagram-embed
 ```
 
@@ -19,7 +23,17 @@ npm i react-instagram-embed
 ```js
 import InstagramEmbed from 'react-instagram-embed'
 
-<InstagramEmbed url='https://instagr.am/p/Zw9o4/' />
+<InstagramEmbed
+  url='https://instagr.am/p/Zw9o4/'
+  maxWidth={320}
+  hideCaption={false}
+  containerTagName='div'
+  protocol=''
+  onLoading={() => {}}
+  onSuccess={() => {}}
+  onAfterRender={() => {}}
+  onFailure={() => {}}
+/>
 ```
 
 ## props
@@ -32,6 +46,7 @@ import InstagramEmbed from 'react-instagram-embed'
   - This property needed if you use device's file system, for example, Electron, Cordova apps
 - `onLoading` {Function}
 - `onSuccess` {Function}
+- `onAfterRender` {Function}
 - `onFailure` {Function}
 
 ## Contributing
