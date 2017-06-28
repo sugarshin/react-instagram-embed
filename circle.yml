@@ -11,10 +11,17 @@ dependencies:
     - yarn
   cache_directories:
     - ~/.cache/yarn
+test:
+  override:
+    - npm run lint
+    - npm run type
+    - npm test
 deployment:
   master:
     branch: master
     commands:
       - git config --global user.name "CircleCI"
       - git config --global user.email "s+circleci@sugarshin.net"
-      - npm run ghpages
+      - NODE_ENV=production npm run build
+      - curl https://sugarshin.net/favicon.ico > build/favicon.ico
+      - node_modules/.bin/gh-pages -x -m 'Update [ci skip]' -d build -r https://github.com/sugarshin/react-instagram-embed.git
