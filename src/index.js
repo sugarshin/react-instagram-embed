@@ -30,7 +30,7 @@ export default class InstagramEmbed extends Component {
 
   componentDidMount() {
     if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
-      this.fetchEmbed(this.getQueryParams(this.props));
+      this.fetchEmbed(this.getQueryParams(this.props))
     } else {
       const protocolToUse: string = window.location.protocol.indexOf('file') === 0
         ? this.props.protocol
@@ -115,7 +115,7 @@ export default class InstagramEmbed extends Component {
       hidecaption: hideCaption,
       maxwidth: typeof maxWidth === 'number' && maxWidth >= 320 ? maxWidth : undefined,
       omitscript: true,
-    });
+    })
   }
 
   handleFetchSuccess = (response: Object): void => {
