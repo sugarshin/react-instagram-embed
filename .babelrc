@@ -1,22 +1,18 @@
 {
-  "presets": ["es2017", "es2016", "es2015", "react"],
+  "presets": ["es2017", "es2016", ["es2015", { "modules": false }], "react"],
   "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"],
   "env": {
     "commonjs": {
-      "presets": ["es2017", "es2016", "es2015", "react"],
-      "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"],
+      "presets": ["es2015"],
+      "plugins": ["transform-flow-strip-types", "transform-class-properties"]
     },
-    "es": {
-      "presets": ["es2017", "es2016", ["es2015", { "modules": false }], "react"],
-      "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"],
-    },
+    "es": {},
     "development": {
-      "presets": ["es2017", "es2016", ["es2015", { "modules": false }], "react"],
-      "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties", "react-hot-loader/babel"]
+      "plugins": ["react-hot-loader/babel"]
     },
     "test": {
-      "presets": ["es2017", "es2016", "es2015", "react"],
-      "plugins": ["transform-object-rest-spread", "transform-flow-strip-types", "transform-class-properties"]
+      "presets": ["es2015"],
+      "plugins": ["transform-flow-strip-types", "transform-class-properties"]
     }
   }
 }
