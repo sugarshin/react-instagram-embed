@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
@@ -27,8 +27,8 @@ const plugins = [
   new HtmlWebpackPlugin(docs ? htmlWebpackPluginConfig : undefined),
   new HtmlWebpackIncludeAssetsPlugin({
     assets: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css',
-    append: false
-  })
+    append: false,
+  }),
 ]
 
 if (docs) {

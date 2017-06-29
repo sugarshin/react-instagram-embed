@@ -26,8 +26,7 @@
     "test": "BABEL_ENV=test ava --verbose",
     "type": "flow",
     "clean:build": "if [ -d build ]; then rm -rf build; fi",
-    "prebuild:demo": "npm run clean:build",
-    "build:demo": "webpack --progress",
+    "build:demo": "NODE_ENV=production webpack --progress",
     "prepublish": "npm run lint && npm run type && npm test && npm run compile"
   },
   "repository": {
