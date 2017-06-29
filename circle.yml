@@ -22,6 +22,4 @@ deployment:
     commands:
       - git config --global user.name "CircleCI"
       - git config --global user.email "s+circleci@sugarshin.net"
-      - NODE_ENV=production npm run build:demo
-      - curl https://sugarshin.net/favicon.ico > build/favicon.ico
-      - node_modules/.bin/gh-pages -x -m 'Update [ci skip]' -d build -r https://github.com/sugarshin/react-instagram-embed.git
+      - /bin/bash ./script/publish-demo.sh
