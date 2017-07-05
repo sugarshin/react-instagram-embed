@@ -72,6 +72,6 @@ module.exports = {
     hot: true,
     publicPath: '/',
     host: '0.0.0.0',
-    port: parseInt(PORT, 10),
+    port: PORT,
   },
 }
