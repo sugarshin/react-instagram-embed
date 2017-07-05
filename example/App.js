@@ -28,8 +28,8 @@ export default class App extends Component {
             hideCaption={this.state.hideCaption}
           />
           <div className='ui'>
-            <span className='ui-label'>Show caption</span>
-            <input type='checkbox' value={this.state.hideCaption} onChange={this.handleChange} />
+            <span className='ui-label'>Hide caption</span>
+            <input type='checkbox' checked={this.state.hideCaption} onChange={this.handleCaptionChange} />
           </div>
           <div className='ui'>
             <span className='ui-label'>Max width</span>
@@ -69,7 +69,7 @@ export default class App extends Component {
   hanldeURLSelect = e => {
     this.setState({ url: e.target.value })
   }
-  handleChange = () => {
+  handleCaptionChange = () => {
     this.setState({ hideCaption: !this.state.hideCaption })
   }
 }
