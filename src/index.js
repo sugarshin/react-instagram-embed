@@ -80,6 +80,10 @@ export default class InstagramEmbed extends Component {
     return <this.props.containerTagName {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.__html }} />
   }
 
+  componentWillUnmount() {
+    this.cancel()
+  }
+
   omitComponentProps(): Object {
     // eslint-disable-next-line no-unused-vars
     const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure, protocol, ...rest } = this.props
@@ -135,5 +139,9 @@ export default class InstagramEmbed extends Component {
   }
 
   // Public
-  cancel = (): void => this.jsonp.cancel()
+  cancel = (): void => {
+    if (this.jsonp) {
+      this.jsonp.cancel()
+    }
+  }
 }
