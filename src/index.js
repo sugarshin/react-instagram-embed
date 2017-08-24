@@ -139,5 +139,9 @@ export default class InstagramEmbed extends Component {
   }
 
   // Public
-  cancel = (): void => this.jsonp.cancel()
+  cancel = (): void => {
+    if (this.jsonp) {
+      this.jsonp.cancel()
+    }
+  }
 }
