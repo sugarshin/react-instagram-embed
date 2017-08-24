@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/node:8.4.0
+    steps:
+      - checkout
+      - run:
+          name: Configure Git
+          command: |
+            git config --global user.name 'CircleCI'
+            git config --global user.email 's+circleci@sugarshin.net'
+      - restore_cache:
+          name: Restoring Cache - dependencies
+          keys:
+            - v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
+      - run:
+          name: System information
+          command: |
+            echo "Node.js $(node -v)"
+            echo "npm $(npm -v)"
+            echo "Yarn v$(yarn --version)"
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Lint
+          command: npm run lint
+      - run:
+          name: Type check
+          command: npm run type
+      - run:
+          name: Test
+          command: npm test
+      - save_cache:
+          paths:
+            - ~/workspace/node_modules
+            - ~/.cache/yarn/
+          key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              /bin/bash ./script/publish-demo.sh
+            fi
