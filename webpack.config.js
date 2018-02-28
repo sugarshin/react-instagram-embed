@@ -1,11 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
+const Stylish = require('webpack-stylish')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const pkg = require('./package.json')
 
-const PORT = process.env.PORT || 8080
-const docs = process.env.NODE_ENV === 'production'
+const { PORT = 8080, NODE_ENV = 'development' } = process.env
+const prod = NODE_ENV === 'production'
 
 const htmlWebpackPluginConfig = {
   title: `${pkg.name} | ${pkg.description}`,
@@ -14,7 +14,7 @@ const htmlWebpackPluginConfig = {
 }
 
 const entry = [
-  'babel-polyfill',
+  '@babel/polyfill',
   './example/index.js',
 ]
 
@@ -24,29 +24,27 @@ const plugins = [
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     },
   }),
-  new HtmlWebpackPlugin(docs ? htmlWebpackPluginConfig : undefined),
-  new HtmlWebpackIncludeAssetsPlugin({
-    assets: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css',
-    append: false,
-  }),
+  new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined),
+  new Stylish(),
 ]
 
-if (docs) {
+if (prod) {
   plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false, screw_ie8: true } })
+    new webpack.optimize.UglifyJsPlugin({
+      uglifyOptions: {
+        output: { ascii_only: true, beautify: false, indent_level: 2 },
+      },
+    })
   )
 } else {
-  entry.unshift(
-    `webpack-dev-server/client?http://localhost:${PORT}`,
-    'webpack/hot/only-dev-server',
-    'react-hot-loader/patch'
-  )
   plugins.push(
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   )
 }
 
 module.exports = {
+  mode: NODE_ENV,
   plugins,
   entry,
   cache: true,
@@ -60,6 +58,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+        options: { plugins: ['react-hot-loader/babel'] }, // TODO: if write to .babelrc then become test fails
       },
       {
         test: /\.css$/,
