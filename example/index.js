@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
 import App from './App'
 
 const main = () => {
@@ -10,14 +9,7 @@ const main = () => {
   document.head.appendChild(meta)
 
   const root = document.body.appendChild(document.createElement('div'))
-  ReactDOM.render(<AppContainer><App /></AppContainer> , root)
-
-  if (module.hot) {
-    module.hot.accept('./App', () => {
-      const NextApp = require('./App').default
-      ReactDOM.render(<AppContainer><NextApp /></AppContainer>, root)
-    })
-  }
+  ReactDOM.render(<App />, root)
 }
 
 main()

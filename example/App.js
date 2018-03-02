@@ -1,13 +1,14 @@
+import 'normalize.css/normalize.css'
 import 'highlight.js/styles/github.css'
-import 'react-ghfork/gh-fork-ribbon.ie.css'
 import 'react-ghfork/gh-fork-ribbon.css'
 import './App.css'
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader'
 import Fork from 'react-ghfork'
 import hljs from 'highlight.js'
 import InstagramEmbed from '../src'
 
-export default class App extends Component {
+class App extends Component {
   state = { url: urls[0], maxWidth: 320, hideCaption: false }
   constructor(props) {
     super(props)
@@ -82,3 +83,5 @@ const urls = [
   'https://instagr.am/p/HeZ7IxgUUc/',
   'https://instagr.am/p/LJ2tq9AUaO/',
 ]
+
+export default hot(module)(App)

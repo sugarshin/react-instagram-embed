@@ -18,11 +18,9 @@ export type Props = {
 type State = { __html: ?string }
 type QueryParams = { url: string, hideCaption: boolean, maxWidth: number }
 
-export default class InstagramEmbed extends Component {
-  props: Props
-  state: State
+export default class InstagramEmbed extends Component<Props, State> {
   jsonp: { promise: Promise<any>, cancel: () => void }
-  _timer: number
+  _timer: TimeoutID
 
   static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:' }
 
@@ -77,7 +75,8 @@ export default class InstagramEmbed extends Component {
   }
 
   render() {
-    return <this.props.containerTagName {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.__html }} />
+    const { containerTagName: Tag } = this.props
+    return <Tag {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.__html }} />
   }
 
   componentWillUnmount() {
