@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const Stylish = require('webpack-stylish')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pkg = require('./package.json')
 
@@ -30,7 +31,7 @@ const plugins = [
 
 if (prod) {
   plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
+    new UglifyJsPlugin({
       uglifyOptions: {
         output: { ascii_only: true, beautify: false, indent_level: 2 },
       },
