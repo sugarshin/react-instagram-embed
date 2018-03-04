@@ -5,18 +5,22 @@ import './App.css'
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 import Fork from 'react-ghfork'
+import InstagramEmbed from 'react-instagram-embed'
 import hljs from 'highlight.js'
-import InstagramEmbed from '../src'
 
 class App extends Component {
   state = { url: urls[0], maxWidth: 320, hideCaption: false }
-  constructor(props) {
-    super(props)
-  }
+
   componentDidMount() {
-    Array.from(document.querySelectorAll('pre code')).forEach(el => hljs.highlightBlock(el))
+    this.highlight()
   }
+
+  componentDidUpdate() {
+    this.highlight()
+  }
+
   render() {
+    const { url, maxWidth, hideCaption } = this.state
     return (
       <div>
         <Fork project='sugarshin/react-instagram-embed' className='right' />
@@ -44,32 +48,26 @@ class App extends Component {
             </select>
           </div>
           <pre>
-            <code>
-              {
-`<InstagramEmbed
-  url='https://instagr.am/p/Zw9o4/'
-  maxWidth={320}
-  hideCaption={false}
-  containerTagName='div'
-  protocol=''
-  onLoading={() => {}}
-  onSuccess={() => {}}
-  onAfterRender={() => {}}
-  onFailure={() => {}}
-/>`
-              }
-            </code>
+            <code>{getCode(url, maxWidth, hideCaption)}</code>
           </pre>
         </div>
       </div>
     )
   }
-  handleMaxWidthChange = () => {
-    this.setState({ maxWidth: this.number.value >= 320 ? this.number.value : undefined })
+
+  highlight() {
+    [...document.querySelectorAll('pre code')].forEach(el => hljs.highlightBlock(el))
   }
+
+  handleMaxWidthChange = () => {
+    const value = parseInt(this.number.value, 10)
+    this.setState({ maxWidth: value >= 320 ? value : undefined })
+  }
+
   hanldeURLSelect = e => {
     this.setState({ url: e.target.value })
   }
+
   handleCaptionChange = () => {
     this.setState({ hideCaption: !this.state.hideCaption })
   }
@@ -83,5 +81,17 @@ const urls = [
   'https://instagr.am/p/HeZ7IxgUUc/',
   'https://instagr.am/p/LJ2tq9AUaO/',
 ]
+
+const getCode = (url, maxWidth, hideCaption) => `<InstagramEmbed
+  url='${url}'
+  maxWidth={${maxWidth}}
+  hideCaption={${hideCaption}}
+  containerTagName='div'
+  protocol=''
+  onLoading={() => {}}
+  onSuccess={() => {}}
+  onAfterRender={() => {}}
+  onFailure={() => {}}
+/>`
 
 export default hot(module)(App)
