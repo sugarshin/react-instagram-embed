@@ -14,6 +14,7 @@ export type Props = {
   onAfterRender: () => void,
   onFailure: () => void,
   protocol: string,
+  injectScript: boolean
 }
 type State = { __html: ?string }
 type QueryParams = { url: string, hideCaption: boolean, maxWidth: number }
@@ -22,7 +23,7 @@ export default class InstagramEmbed extends Component<Props, State> {
   jsonp: { promise: Promise<any>, cancel: () => void }
   _timer: TimeoutID
 
-  static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:' }
+  static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:', injectScript: true }
 
   state = { __html: null }
 
@@ -30,18 +31,7 @@ export default class InstagramEmbed extends Component<Props, State> {
     if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
       this.fetchEmbed(this.getQueryParams(this.props))
     } else {
-      const protocolToUse: string = window.location.protocol.indexOf('file') === 0
-        ? this.props.protocol
-        : ''
-
-      const s = document.createElement('script')
-      s.async = s.defer = true
-      s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
-      s.id = 'react-instagram-embed-script'
-      const body: HTMLElement | null = document.body
-      if (body) {
-        body.appendChild(s)
-      }
+      if (this.props.injectScript) { this.injectScript() }
       this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
     }
   }
@@ -87,6 +77,21 @@ export default class InstagramEmbed extends Component<Props, State> {
     // eslint-disable-next-line no-unused-vars
     const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure, protocol, ...rest } = this.props
     return rest
+  }
+
+  injectScript(): void {
+    const protocolToUse: string = window.location.protocol.indexOf('file') === 0
+      ? this.props.protocol
+      : ''
+
+    const s = document.createElement('script')
+    s.async = s.defer = true
+    s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
+    s.id = 'react-instagram-embed-script'
+    const body: HTMLElement | null = document.body
+    if (body) {
+      body.appendChild(s)
+    }
   }
 
   checkAPI(): Promise<any> {
