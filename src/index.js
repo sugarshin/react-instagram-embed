@@ -75,7 +75,7 @@ export default class InstagramEmbed extends Component<Props, State> {
 
   omitComponentProps(): Object {
     // eslint-disable-next-line no-unused-vars
-    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure, protocol, ...rest } = this.props
+    const { url, hideCaption, maxWidth, containerTagName, onLoading, onSuccess, onAfterRender, onFailure, protocol, injectScript, ...rest } = this.props
     return rest
   }
 
