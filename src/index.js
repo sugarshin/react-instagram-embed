@@ -36,14 +36,14 @@ export default class InstagramEmbed extends Component<Props, State> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     const { url, hideCaption, maxWidth, containerTagName } = this.props
-    if (nextProps.url !== url ||
-        nextProps.hideCaption !== hideCaption ||
-        nextProps.maxWidth !== maxWidth ||
-        nextProps.containerTagName !== containerTagName) {
+    if (prevProps.url !== url ||
+        prevProps.hideCaption !== hideCaption ||
+        prevProps.maxWidth !== maxWidth ||
+        prevProps.containerTagName !== containerTagName) {
       this.jsonp.cancel()
-      this.fetchEmbed(this.getQueryParams(nextProps))
+      this.fetchEmbed(this.getQueryParams(this.props))
     }
   }
 
