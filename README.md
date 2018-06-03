@@ -29,6 +29,7 @@ import InstagramEmbed from 'react-instagram-embed'
   hideCaption={false}
   containerTagName='div'
   protocol=''
+  injectScript
   onLoading={() => {}}
   onSuccess={() => {}}
   onAfterRender={() => {}}
@@ -41,9 +42,10 @@ import InstagramEmbed from 'react-instagram-embed'
 - `url` {String} Instagram URL. Required
 - `maxWidth` {Number} Max width. Minimum size is `320`. Default `undefined`
 - `hideCaption` {Boolean} Default `false`
-- `containerTagName` {String} Default `div`
+- `containerTagName` {String} Default `'div'`
 - `protocol` {String} Instagram API script protocol. Default `''` same as current protocol
   - This property needed if you use device's file system, for example, Electron, Cordova apps
+- `injectScript` {Boolean} Default `true`
 - `onLoading` {Function}
 - `onSuccess` {Function}
 - `onAfterRender` {Function}

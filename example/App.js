@@ -87,6 +87,7 @@ const getCode = (url, maxWidth, hideCaption) => `<InstagramEmbed
   maxWidth={${maxWidth}}
   hideCaption={${hideCaption}}
   containerTagName='div'
+  injectScript
   protocol=''
   onLoading={() => {}}
   onSuccess={() => {}}
