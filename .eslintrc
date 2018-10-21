@@ -5,6 +5,12 @@
   "parserOptions": {
     "sourceType": "module"
   },
+  "settings": {
+    "react": {
+      "version": "16.5.2",
+      "flowVersion": "0.83"
+    }
+  },
   "env": {
     "browser": true,
     "node": true
