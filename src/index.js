@@ -1,7 +1,6 @@
 /* @flow */
 
 import React, { Component } from 'react'
-import jsonp from 'jsonp-p'
 import qs from 'query-string'
 
 export type Props = {
@@ -18,9 +17,10 @@ export type Props = {
 }
 type State = { __html: ?string }
 type QueryParams = { url: string, hideCaption: boolean, maxWidth: number }
+type RequestPromise = { promise: Promise<any>, cancel: () => void }
 
 export default class InstagramEmbed extends Component<Props, State> {
-  jsonp: { promise: Promise<any>, cancel: () => void }
+  request: RequestPromise
   _timer: TimeoutID
 
   static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:', injectScript: true }
@@ -42,7 +42,7 @@ export default class InstagramEmbed extends Component<Props, State> {
         prevProps.hideCaption !== hideCaption ||
         prevProps.maxWidth !== maxWidth ||
         prevProps.containerTagName !== containerTagName) {
-      this.jsonp.cancel()
+      this.request.cancel()
       this.fetchEmbed(this.getQueryParams(this.props))
     }
   }
@@ -110,9 +110,9 @@ export default class InstagramEmbed extends Component<Props, State> {
   }
 
   fetchEmbed(queryParams: string): void {
-    this.jsonp = jsonp(`https://api.instagram.com/oembed/?${queryParams}`)
+    this.request = this.createRequestPromise(`https://api.instagram.com/oembed/?${queryParams}`)
     this.props.onLoading && this.props.onLoading()
-    this.jsonp.promise
+    this.request.promise
       .then(this.handleFetchSuccess)
       .catch(this.handleFetchFailure)
   }
@@ -144,8 +144,24 @@ export default class InstagramEmbed extends Component<Props, State> {
 
   // Public
   cancel = (): void => {
-    if (this.jsonp) {
-      this.jsonp.cancel()
+    if (this.request) {
+      this.request.cancel()
     }
+  }
+
+  createRequestPromise = (url: string, ...opts: any): RequestPromise => {
+    const request = {}
+
+    request.promise = new Promise((resolve, reject) => {
+      const promise = fetch(new Request(url, {...opts}))
+        .then(response => response.json())
+        .then(json => resolve(json))
+        .catch(err => reject(err))
+
+      request.cancel = () => reject(new Error('Cancelled'))
+      return promise
+    })
+
+    return request
   }
 }
