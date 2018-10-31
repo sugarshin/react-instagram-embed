@@ -1,8 +1,6 @@
 {
   "presets": [
-    "@babel/es2017",
-    "@babel/es2016",
-    ["@babel/es2015", { "modules": false }],
+    ["@babel/env", { "modules": false }],
     "@babel/react"
   ],
   "plugins": [
@@ -12,10 +10,10 @@
   ],
   "env": {
     "test": {
-      "presets": ["@babel/es2015"]
+      "presets": ["@babel/env"]
     },
     "commonjs": {
-      "presets": ["@babel/es2015"]
+      "presets": ["@babel/env"]
     }
   }
 }
