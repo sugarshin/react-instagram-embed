@@ -153,7 +153,7 @@ export default class InstagramEmbed extends Component<Props, State> {
     const request = {}
 
     request.promise = new Promise((resolve, reject) => {
-      const promise = fetch(new Request(url, {...opts}))
+      const promise = fetch(url, { ...opts })
         .then(response => response.json())
         .then(json => resolve(json))
         .catch(err => reject(err))

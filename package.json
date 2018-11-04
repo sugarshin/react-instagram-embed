@@ -58,7 +58,6 @@
     "react-dom": "^16.0.0 || ^15.0.0 || ~0.14.0"
   },
   "dependencies": {
-    "jsonp-p": "^2.0.0",
     "query-string": "^5.1.0"
   },
   "devDependencies": {
