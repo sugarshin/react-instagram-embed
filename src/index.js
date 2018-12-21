@@ -13,6 +13,7 @@ export type Props = {
   onAfterRender: () => void,
   onFailure: () => void,
   protocol: string,
+  injectScript: boolean
 }
 type State = { __html: ?string }
 type QueryParams = { url: string, hideCaption: boolean, maxWidth: number }
@@ -20,18 +21,18 @@ type RequestPromise = { promise: Promise<any>, cancel: () => void }
 
 export default class InstagramEmbed extends Component<Props, State> {
   request: RequestPromise
+  _timer: TimeoutID
 
-  static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:' }
+  static defaultProps = { hideCaption: false, containerTagName: 'div', protocol: 'https:', injectScript: true }
 
   state = { __html: null }
 
   componentDidMount() {
-    if (window.instgrm) {
+    if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
       this.fetchEmbed(this.getQueryParams(this.props))
     } else {
-      this.injectScript(() => {
-        this.fetchEmbed(this.getQueryParams(this.props))
-      })
+      if (this.props.injectScript) { this.injectScript() }
+      this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
     }
   }
 
@@ -78,33 +79,34 @@ export default class InstagramEmbed extends Component<Props, State> {
     return rest
   }
 
-  injectScript(cb: Function): void {
-    const scriptElement: HTMLElement | null = document.getElementById('react-instagram-embed-script')
-    const onLoadEventListenerOnce = (ele: HTMLElement, func: Function) => {
-      ele.addEventListener("load", (() => {
-        return cb = () => {
-          func()
-          ele.removeEventListener("load", cb)
-        }
-      })())
-    }
-    if (!scriptElement) {
-      const protocolToUse: string = window.location.protocol.indexOf('file') === 0
-        ? this.props.protocol
-        : ''
+  injectScript(): void {
+    const protocolToUse: string = window.location.protocol.indexOf('file') === 0
+      ? this.props.protocol
+      : ''
 
-      const s = document.createElement('script')
-      s.async = s.defer = true
-      s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
-      s.id = 'react-instagram-embed-script'
-      onLoadEventListenerOnce(s, cb)
-      const body: HTMLElement | null = document.body
-      if (body) {
-        body.appendChild(s)
-      }
-    } else {
-      onLoadEventListenerOnce(scriptElement, cb)
+    const s = document.createElement('script')
+    s.async = s.defer = true
+    s.src = `${protocolToUse}//platform.instagram.com/en_US/embeds.js`
+    s.id = 'react-instagram-embed-script'
+    const body: HTMLElement | null = document.body
+    if (body) {
+      body.appendChild(s)
     }
+  }
+
+  checkAPI(): Promise<any> {
+    return new Promise(resolve => {
+      (function checkAPI(_this) {
+        _this._timer = setTimeout(() => {
+          if (window.instgrm) {
+            clearTimeout(_this._timer)
+            resolve()
+          } else {
+            checkAPI(_this)
+          }
+        }, 20)
+      })(this)
+    })
   }
 
   fetchEmbed(queryParams: string): void {
@@ -136,6 +138,7 @@ export default class InstagramEmbed extends Component<Props, State> {
   }
 
   handleFetchFailure = (...args: any): void => {
+    clearTimeout(this._timer)
     this.props.onFailure && this.props.onFailure(...args)
   }
 
