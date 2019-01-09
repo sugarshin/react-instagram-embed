@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/workspace
     docker:
-      - image: circleci/node:8.11.2
+      - image: circleci/node:10.15.0
     steps:
       - checkout
       - run:
