@@ -28,10 +28,12 @@ export default class InstagramEmbed extends Component<Props, State> {
   state = { __html: null }
 
   componentDidMount() {
-    if (window.instgrm || document.getElementById('react-instagram-embed-script')) {
+    if (window.instgrm) {
       this.fetchEmbed(this.getQueryParams(this.props))
     } else {
-      if (this.props.injectScript) { this.injectScript() }
+      if (this.props.injectScript && !document.getElementById('react-instagram-embed-script')) {
+        this.injectScript()
+      }
       this.checkAPI().then(() => this.fetchEmbed(this.getQueryParams(this.props)))
     }
   }
