@@ -1,30 +1,52 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/workspace
+version: 2.1
+
+references:
+  workspace_root: &workspace_root
+      ~/workspace
+
+executors:
+  nodejs:
+    working_directory: *workspace_root
     docker:
       - image: circleci/node:10.15.0
+
+commands:
+  restore_deps:
     steps:
-      - checkout
-      - run:
-          name: Configure Git
-          command: |
-            git config --global user.name 'CircleCI'
-            git config --global user.email 's+circleci@sugarshin.net'
       - restore_cache:
-          name: Restoring Cache - dependencies
+          name: Restore Cache - Dependency Modules
           keys:
-            - v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - v1-dependencies-
+            - v1-npm-deps-{{ checksum "yarn.lock" }}
+            - v1-npm-deps-
+  save_deps:
+    steps:
+      - save_cache:
+          name: Save Cache - Dependency Modules
+          key: v1-npm-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+  add_npmrc:
+    steps:
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
+  configure_git:
+    steps:
       - run:
           name: System information
           command: |
-            echo "Node.js $(node -v)"
-            echo "npm $(npm -v)"
-            echo "Yarn v$(yarn --version)"
-      - run:
-          name: Install dependencies
-          command: yarn
+            git config --global user.name 'CircleCI'
+            git config --global user.email 's+circleci@sugarshin.net'
+
+jobs:
+  test:
+    executor:
+      name: nodejs
+    steps:
+      - checkout
+      - restore_deps
+      - run: yarn
+      - save_deps
       - run:
           name: Lint
           command: npm run lint
@@ -34,13 +56,61 @@ jobs:
       - run:
           name: Test
           command: npm test
-      - save_cache:
+
+  build:
+    executor:
+      name: nodejs
+    steps:
+      - checkout
+      - restore_deps
+      - run: yarn
+      - save_deps
+      - run: npm run compile
+      - persist_to_workspace:
+          root: *workspace_root
           paths:
-            - ~/workspace/node_modules
-            - ~/.cache/yarn/
-          key: v1-dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - deploy:
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              /bin/bash ./script/publish-demo.sh
-            fi
+            - lib
+            - es
+
+  deploy_demo:
+    executor:
+      name: nodejs
+    steps:
+      - checkout
+      - restore_deps
+      - run: yarn
+      - save_deps
+      - configure_git
+      - run: /bin/bash ./script/publish-demo.sh
+
+  publish:
+    executor:
+      name: nodejs
+    steps:
+      - checkout
+      - attach_workspace:
+          at: *workspace_root
+      - add_npmrc
+      - run:
+          name: Publish package to npm and tagging
+          command: /bin/bash .circleci/publish-and-tagging.sh
+
+workflows:
+  test_build_deploy_publish:
+    jobs:
+      - test
+      - build
+      - deploy_demo:
+          requires:
+            - test
+            - build
+          filters:
+            branches:
+              only: master
+      - publish:
+          requires:
+            - test
+            - build
+          filters:
+            branches:
+              only: master
