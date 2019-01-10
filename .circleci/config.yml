@@ -33,7 +33,7 @@ commands:
   configure_git:
     steps:
       - run:
-          name: System information
+          name: Configure Git
           command: |
             git config --global user.name 'CircleCI'
             git config --global user.email 's+circleci@sugarshin.net'
