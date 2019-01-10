@@ -81,7 +81,7 @@ jobs:
       - run: yarn
       - save_deps
       - configure_git
-      - run: /bin/bash ./script/publish-demo.sh
+      - run: /bin/bash .circleci/publish-demo.sh
 
   publish:
     executor:
