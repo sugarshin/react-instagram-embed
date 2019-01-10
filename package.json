@@ -27,8 +27,7 @@
     "test:coverage": "nyc npm test",
     "type": "flow",
     "clean:build": "if [ -d build ]; then rm -rf build; fi",
-    "build:demo": "NODE_ENV=production webpack",
-    "prepublishOnly": "npm run lint && npm run type && npm test && npm run compile"
+    "build:demo": "NODE_ENV=production webpack"
   },
   "repository": {
     "type": "git",
