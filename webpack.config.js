@@ -1,23 +1,22 @@
-const path = require('path')
-const webpack = require('webpack')
-const Stylish = require('webpack-stylish')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const pkg = require('./package.json')
+const path = require('path');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const pkg = require('./package.json');
 
-const { PORT = 8080, NODE_ENV = 'development' } = process.env
-const prod = NODE_ENV === 'production'
+const { PORT = 8080, NODE_ENV = 'development' } = process.env;
+const prod = NODE_ENV === 'production';
 
 const htmlWebpackPluginConfig = {
   title: `${pkg.name} | ${pkg.description}`,
   minify: { collapseWhitespace: true },
   favicon: 'build/favicon.ico',
-}
+};
 
 const entry = [
   '@babel/polyfill',
-  './example/index.js',
-]
+  './example/index.tsx',
+];
 
 const plugins = [
   new webpack.DefinePlugin({
@@ -26,22 +25,13 @@ const plugins = [
     },
   }),
   new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined),
-  new Stylish(),
-]
+];
 
-if (prod) {
-  plugins.push(
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        output: { ascii_only: true, beautify: false, indent_level: 2 },
-      },
-    })
-  )
-} else {
+if (!prod) {
   plugins.push(
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
-  )
+  );
 }
 
 module.exports = {
@@ -54,17 +44,26 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json', '.mjs'],
     alias: {
-      [pkg.name]: path.resolve(__dirname, 'src/'),
+      [pkg.name]: path.resolve(__dirname, 'src/index.tsx'),
     },
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(j|t)sx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: { plugins: ['react-hot-loader/babel'] }, // TODO: if write to .babelrc then become test fails
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { plugins: ['react-hot-loader/babel'] }, // TODO: if write to .babelrc then become test fails
+          },
+          {
+            loader: 'awesome-typescript-loader',
+            options: { configFileName: 'tsconfig.demo.json' },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -72,6 +71,22 @@ module.exports = {
       },
     ],
   },
+  ...(prod ? {
+    optimization: {
+      minimizer: [new UglifyJsPlugin()],
+      splitChunks: {
+        maxSize: 244000,
+        cacheGroups: {
+          vendor: {
+            test: /node_modules/,
+            name: 'vendor',
+            chunks: 'initial',
+            enforce: true,
+          },
+        },
+      },
+    },
+  } : {}),
   devServer: {
     contentBase: './example',
     hot: true,
@@ -79,4 +94,4 @@ module.exports = {
     host: '0.0.0.0',
     port: PORT,
   },
-}
+};

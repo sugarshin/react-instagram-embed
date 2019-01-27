@@ -16,13 +16,13 @@ commands:
       - restore_cache:
           name: Restore Cache - Dependency Modules
           keys:
-            - v1-npm-deps-{{ checksum "yarn.lock" }}
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
             - v1-npm-deps-
   save_deps:
     steps:
       - save_cache:
           name: Save Cache - Dependency Modules
-          key: v1-npm-deps-{{ checksum "yarn.lock" }}
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
   add_npmrc:
@@ -45,14 +45,11 @@ jobs:
     steps:
       - checkout
       - restore_deps
-      - run: yarn
+      - run: npm install
       - save_deps
       - run:
           name: Lint
           command: npm run lint
-      - run:
-          name: Type check
-          command: npm run type
       - run:
           name: Test
           command: npm test
@@ -63,9 +60,9 @@ jobs:
     steps:
       - checkout
       - restore_deps
-      - run: yarn
+      - run: npm install
       - save_deps
-      - run: npm run compile
+      - run: NODE_ENV=production npm run compile
       - persist_to_workspace:
           root: *workspace_root
           paths:
@@ -78,7 +75,7 @@ jobs:
     steps:
       - checkout
       - restore_deps
-      - run: yarn
+      - run: npm install
       - save_deps
       - configure_git
       - run: /bin/bash .circleci/publish-demo.sh

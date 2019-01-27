@@ -18,8 +18,8 @@ npm i react-instagram-embed
 
 ## Usage
 
-```js
-import InstagramEmbed from 'react-instagram-embed'
+```tsx
+import InstagramEmbed from 'react-instagram-embed';
 
 <InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'

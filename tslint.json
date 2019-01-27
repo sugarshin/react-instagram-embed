@@ -1,0 +1,22 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "rules": {
+    "prettier": true,
+    "jsx-boolean-value": [
+      true,
+      "never"
+    ],
+    "max-line-length": [true, 120],
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "interface-name": false
+  }
+}

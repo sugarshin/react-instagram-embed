@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./example",
+    "target": "es2018",
+    "declaration": false,
+    "jsx": "react",
+    "lib": ["es2015", "es2016", "es2017", "dom", "dom.iterable", "esnext.asynciterable"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "sourceMap": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "react-instagram-embed": ["src/index"]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "example/types"
+    ]
+  },
+  "exclude": ["node_modules", "src/**/*.test.ts", "src/**/*.test.tsx"]
+}
