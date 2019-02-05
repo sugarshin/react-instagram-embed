@@ -68,7 +68,7 @@
     "@babel/polyfill": "7.2.5",
     "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
-    "@types/enzyme": "3.1.15",
+    "@types/enzyme": "3.1.16",
     "@types/enzyme-adapter-react-16": "1.0.3",
     "@types/highlight.js": "9.12.3",
     "@types/jest": "23.3.13",
