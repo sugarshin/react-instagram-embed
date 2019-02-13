@@ -77,7 +77,7 @@
     "@types/react-dom": "16.8.0",
     "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.0.5",
-    "codecov": "3.1.0",
+    "codecov": "3.2.0",
     "css-loader": "2.1.0",
     "custom-tslint-formatters": "2.4.0",
     "enzyme": "3.8.0",
