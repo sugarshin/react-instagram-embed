@@ -107,6 +107,6 @@
     "uglifyjs-webpack-plugin": "2.1.2",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
-    "webpack-dev-server": "3.3.0"
+    "webpack-dev-server": "3.3.1"
   }
 }
