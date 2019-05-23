@@ -95,7 +95,7 @@
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-ghfork": "0.5.2",
-    "react-hot-loader": "4.8.7",
+    "react-hot-loader": "4.8.8",
     "style-loader": "0.23.1",
     "ts-jest": "24.0.2",
     "tslint": "5.16.0",
