@@ -23,6 +23,7 @@ import InstagramEmbed from 'react-instagram-embed';
 
 <InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'
+  accessToken='123|456'
   maxWidth={320}
   hideCaption={false}
   containerTagName='div'
@@ -38,6 +39,7 @@ import InstagramEmbed from 'react-instagram-embed';
 ## props
 
 - `url` {String} Instagram URL. Required
+- `accessToken` {String} Instagram Client Access Token. Required
 - `maxWidth` {Number} Max width. Minimum size is `320`. Default `undefined`
 - `hideCaption` {Boolean} Default `false`
 - `containerTagName` {String} Default `'div'`
