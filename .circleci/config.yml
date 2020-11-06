@@ -8,7 +8,7 @@ executors:
   nodejs:
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:10.15.0
+      - image: circleci/node:10.22.0
 
 commands:
   restore_deps:
