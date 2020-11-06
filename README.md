@@ -41,7 +41,7 @@ Access token is combination of App Id and Client Token. See https://developers.f
 ## props
 
 - `url` {String} Instagram URL. Required
-- `accessToken` {String} Instagram Client Access Token. Required
+- `clientAccessToken` {String} Instagram Client Access Token. Required
 - `maxWidth` {Number} Max width. Minimum size is `320`. Default `undefined`
 - `hideCaption` {Boolean} Default `false`
 - `containerTagName` {String} Default `'div'`
