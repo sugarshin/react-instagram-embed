@@ -9,7 +9,7 @@ declare global {
 
 export interface Props<T = 'div'> {
   url: string;
-  accessToken: string;
+  clientAccessToken: string;
   hideCaption: boolean;
   containerTagName: T;
   protocol: string;
@@ -121,7 +121,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
   private omitComponentProps() {
     const {
       url,
-      accessToken,
+      clientAccessToken,
       hideCaption,
       maxWidth,
       containerTagName,
@@ -166,18 +166,18 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
 
   private getQueryParams({
     url,
-    accessToken,
+    clientAccessToken,
     hideCaption,
     maxWidth
   }: {
     url: string;
-    accessToken: string;
+    clientAccessToken: string;
     hideCaption: boolean;
     maxWidth?: number;
   }): string {
     return qs.stringify({
       url,
-      access_token: accessToken,
+      access_token: clientAccessToken,
       hidecaption: hideCaption,
       maxwidth: typeof maxWidth === 'number' && maxWidth >= 320 ? maxWidth : undefined,
       omitscript: true

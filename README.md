@@ -23,7 +23,7 @@ import InstagramEmbed from 'react-instagram-embed';
 
 <InstagramEmbed
   url='https://instagr.am/p/Zw9o4/'
-  accessToken='123|456'
+  clientAccessToken='123|456'
   maxWidth={320}
   hideCaption={false}
   containerTagName='div'
