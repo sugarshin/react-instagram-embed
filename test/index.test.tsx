@@ -4,6 +4,6 @@ import * as React from 'react';
 import InstagramEmbed from '../src';
 
 test('should render self and sub-components', () => {
-  const tree = shallow(<InstagramEmbed url="https://instagr.am/p/Zw9o4/" />);
+  const tree = shallow(<InstagramEmbed url="https://instagr.am/p/Zw9o4/" clientAccessToken="abc|123" />);
   expect(toJson(tree)).toMatchSnapshot();
 });
