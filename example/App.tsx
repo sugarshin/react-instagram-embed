@@ -7,6 +7,7 @@ import { hot } from 'react-hot-loader';
 import Fork from 'react-ghfork';
 import InstagramEmbed from 'react-instagram-embed';
 import hljs from 'highlight.js';
+import env from './env';
 
 interface State {
   url: string;
@@ -15,7 +16,7 @@ interface State {
 }
 
 class App extends Component<{}, State> {
-  public state = { url: urls[0], maxWidth: '320', hideCaption: false };
+  public state = { url: urls[0], maxWidth: '375', hideCaption: false };
 
   private numberInputRef = React.createRef<HTMLInputElement>();
 
@@ -44,6 +45,7 @@ class App extends Component<{}, State> {
             url={this.state.url}
             maxWidth={parseInt(this.state.maxWidth, 10)}
             hideCaption={this.state.hideCaption}
+            clientAccessToken={env.INSTAGRAM_ACCESS_TOKEN}
           />
           <div className="ui">
             <span className="ui-label">Hide caption</span>
@@ -102,6 +104,7 @@ const urls = [
 ];
 
 const getCode = (url: string, maxWidth: string, hideCaption: boolean) => `<InstagramEmbed
+  clientAccessToken='<appId>|<clientToken>'
   url='${url}'
   maxWidth={${maxWidth}}
   hideCaption={${hideCaption}}

@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DotenvWebpack = require('dotenv-webpack');
 const pkg = require('./package.json');
 
 const { PORT = 8080, NODE_ENV = 'development' } = process.env;
@@ -19,18 +20,18 @@ const entry = [
 ];
 
 const plugins = [
-  new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-    },
-  }),
   new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined),
 ];
 
-if (!prod) {
+if (prod) {
+  plugins.push(
+    new webpack.EnvironmentPlugin(['INSTAGRAM_ACCESS_TOKEN']),
+  );
+} else {
   plugins.push(
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new DotenvWebpack()
   );
 }
 
