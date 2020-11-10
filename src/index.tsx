@@ -200,7 +200,11 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
   private handleFetchFailure = (...args: any[]): void => {
     clearTimeout(this.timer);
     if (this.props.onFailure) {
-      this.props.onFailure(args);
+      if (Array.isArray(args) && args.length === 1 && args[0].error) {
+        this.props.onFailure(args[0].error);
+      } else {
+        this.props.onFailure(args);
+      }
     }
   };
 
@@ -208,9 +212,19 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     const request = {} as RequestPromise;
 
     request.promise = new Promise((resolve, reject) => {
+      let cachedResponse: globalThis.Response | undefined;
       const promise = fetch(url)
-        .then(response => response.json())
-        .then(json => resolve(json))
+        .then(response => {
+          cachedResponse = response;
+          return response.json();
+        })
+        .then(json => {
+          if (cachedResponse && cachedResponse.status >= 400) {
+            reject(json);
+          } else {
+            resolve(json);
+          }
+        })
         .catch(err => reject(err));
 
       request.cancel = () => reject(new Error('Cancelled'));
