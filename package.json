@@ -98,7 +98,7 @@
     "react-ghfork": "0.5.2",
     "react-hot-loader": "4.8.8",
     "style-loader": "0.23.1",
-    "ts-jest": "24.0.2",
+    "ts-jest": "25.2.1",
     "tslint": "5.17.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-eslint-rules": "5.4.0",
