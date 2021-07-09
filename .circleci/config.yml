@@ -59,7 +59,9 @@ jobs:
       - save_node_modules
       - run:
           name: Lint
-          command: npm run lint
+          command: |
+            npm run lint:eslint
+            npm run lint:prettier
       - run:
           name: Test
           command: npm test
