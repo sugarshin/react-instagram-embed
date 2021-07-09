@@ -1,10 +1,9 @@
 import 'normalize.css/normalize.css';
 import 'highlight.js/styles/github.css';
-import 'react-ghfork/gh-fork-ribbon.css';
 import './App.css';
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
-import Fork from 'react-ghfork';
+import GitHubRibbon from 'react-github-ribbons';
 import InstagramEmbed from 'react-instagram-embed';
 import hljs from 'highlight.js';
 import env from './env';
@@ -32,7 +31,7 @@ class App extends Component<{}, State> {
     const { url, maxWidth, hideCaption } = this.state;
     return (
       <div>
-        <Fork project="sugarshin/react-instagram-embed" className="right" />
+        <GitHubRibbon href="https://github.com/sugarshin/react-instagram-embed" className="right" />
         <div
           className="body"
           style={{

@@ -1,14 +1,12 @@
 {
-  "transform": {
-    "^.+\\.tsx?$": "ts-jest"
-  },
+  "preset": "ts-jest",
   "testRegex": "((\\.|/)test)\\.tsx$",
+  "testEnvironment": "jsdom",
   "moduleFileExtensions": [
     "ts",
     "tsx",
     "js",
     "jsx",
     "json"
-  ],
-  "setupTestFrameworkScriptFile": "<rootDir>/setup-test.ts"
+  ]
 }

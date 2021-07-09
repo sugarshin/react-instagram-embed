@@ -1,25 +1,19 @@
-const path = require('path');
-const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const DotenvWebpack = require('dotenv-webpack');
-const pkg = require('./package.json');
+import path from 'path';
+import webpack, { Configuration } from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import DotenvWebpack from 'dotenv-webpack';
+import pkgjson from './package.json';
 
-const { PORT = 8080, NODE_ENV = 'development' } = process.env;
+const { NODE_ENV = 'development' } = process.env;
 const prod = NODE_ENV === 'production';
 
 const htmlWebpackPluginConfig = {
-  title: `${pkg.name} | ${pkg.description}`,
+  title: `${pkgjson.name} | ${pkgjson.description}`,
   minify: { collapseWhitespace: true },
   favicon: 'build/favicon.ico',
 };
 
-const entry = [
-  '@babel/polyfill',
-  './example/index.tsx',
-];
-
-const plugins = [
+const plugins: Configuration['plugins'] = [
   new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined),
 ];
 
@@ -29,16 +23,22 @@ if (prod) {
   );
 } else {
   plugins.push(
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new DotenvWebpack()
   );
 }
 
-module.exports = {
-  mode: NODE_ENV,
+function mode(): Configuration['mode'] {
+  if (NODE_ENV === 'development' || NODE_ENV === 'production') {
+    return NODE_ENV;
+  }
+  return 'none';
+}
+
+const config: Configuration = {
+  mode: mode(),
   plugins,
-  entry,
+  entry: './example/index.tsx',
   cache: true,
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -47,7 +47,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.mjs'],
     alias: {
-      [pkg.name]: path.resolve(__dirname, 'src/index.tsx'),
+      [pkgjson.name]: path.resolve(__dirname, 'src/index.tsx'),
     },
   },
   module: {
@@ -58,11 +58,7 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: { plugins: ['react-hot-loader/babel'] }, // TODO: if write to .babelrc then become test fails
-          },
-          {
-            loader: 'awesome-typescript-loader',
-            options: { configFileName: 'tsconfig.demo.json' },
+            options: { plugins: ['react-hot-loader/babel'] },
           },
         ],
       },
@@ -74,7 +70,6 @@ module.exports = {
   },
   ...(prod ? {
     optimization: {
-      minimizer: [new UglifyJsPlugin()],
       splitChunks: {
         maxSize: 244000,
         cacheGroups: {
@@ -88,11 +83,6 @@ module.exports = {
       },
     },
   } : {}),
-  devServer: {
-    contentBase: './example',
-    hot: true,
-    publicPath: '/',
-    host: '0.0.0.0',
-    port: PORT,
-  },
 };
+
+export default config;

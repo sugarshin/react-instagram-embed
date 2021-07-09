@@ -1,11 +1,5 @@
 import * as React from 'react';
-import * as qs from 'query-string';
-
-declare global {
-  interface Window {
-    instgrm: any;
-  }
-}
+import { stringify } from 'querystring';
 
 export interface Props<T = 'div'> {
   url: string;
@@ -149,7 +143,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     }
   }
 
-  private checkAPI(): Promise<any> {
+  private checkAPI(): Promise<void> {
     return new Promise(resolve => {
       (function checkAPI(self: InstagramEmbed) {
         self.timer = window.setTimeout(() => {
@@ -175,7 +169,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     hideCaption: boolean;
     maxWidth?: number;
   }): string {
-    return qs.stringify({
+    return stringify({
       url,
       access_token: clientAccessToken,
       hidecaption: hideCaption,
