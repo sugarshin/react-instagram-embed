@@ -34,7 +34,8 @@
     "test": "jest --config jest.config.json",
     "test:coverage": "npm test -- --coverage",
     "clean:build": "if [ -d build ]; then rm -rf build; fi",
-    "build:demo": "NODE_ENV=production webpack"
+    "prebuild:demo": "npm run clean:build",
+    "build:demo": "webpack"
   },
   "repository": {
     "type": "git",
