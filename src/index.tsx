@@ -109,7 +109,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
   };
 
   private fetchEmbed(queryParams: string): void {
-    this.request = this.createRequestPromise(`https://graph.facebook.com/v8.0/instagram_oembed/?${queryParams}`);
+    this.request = this.createRequestPromise(`https://graph.facebook.com/v11.0/instagram_oembed/?${queryParams}`);
 
     if (this.props.onLoading) {
       this.props.onLoading();
