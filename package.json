@@ -15,7 +15,7 @@
     "instagram"
   ],
   "scripts": {
-    "prepare": "is-ci || husky install",
+    "prepare": "npx is-ci || husky install",
     "lint-staged": "lint-staged",
     "lint:eslint": "eslint '**/*.{ts,js}'",
     "fix:eslint": "npm run lint:eslint --fix",
