@@ -10,12 +10,12 @@ import env from './env';
 
 interface State {
   url: string;
-  maxWidth?: string;
+  maxWidth?: number;
   hideCaption: boolean;
 }
 
-class App extends Component<{}, State> {
-  public state = { url: urls[0], maxWidth: '375', hideCaption: false };
+class App extends Component<Record<string, never>, State> {
+  public state = { url: urls[0], maxWidth: 375, hideCaption: false };
 
   private numberInputRef = React.createRef<HTMLInputElement>();
 
@@ -42,7 +42,7 @@ class App extends Component<{}, State> {
           <InstagramEmbed
             className="instagram-embed"
             url={this.state.url}
-            maxWidth={parseInt(this.state.maxWidth, 10)}
+            maxWidth={this.state.maxWidth}
             hideCaption={this.state.hideCaption}
             clientAccessToken={env.INSTAGRAM_ACCESS_TOKEN}
           />
@@ -52,7 +52,7 @@ class App extends Component<{}, State> {
           </div>
           <div className="ui">
             <span className="ui-label">Max width</span>
-            <input type="number" defaultValue={this.state.maxWidth} min={320} ref={this.numberInputRef} />
+            <input type="number" defaultValue={this.state.maxWidth} min={320} max={658} ref={this.numberInputRef} />
             <button onClick={this.handleMaxWidthChange}>Change</button>
           </div>
           <div className="ui">
@@ -73,15 +73,16 @@ class App extends Component<{}, State> {
     );
   }
 
-  private highlight(): void;
-
   private highlight() {
-    [...document.querySelectorAll('pre code')].forEach(el => hljs.highlightBlock(el));
+    [...document.querySelectorAll('pre code')].forEach(el => hljs.highlightElement(el as HTMLElement));
   }
 
   private handleMaxWidthChange = () => {
-    const value = parseInt(this.numberInputRef.current!.value, 10);
-    this.setState({ maxWidth: value >= 320 ? `${value}` : undefined });
+    const maxWidth = this.numberInputRef.current.value
+      ? parseInt(this.numberInputRef.current.value, 10)
+      : undefined;
+    console.log('maxWidth', maxWidth);
+    this.setState({ maxWidth });
   };
 
   private hanldeURLSelect = (e: React.SyntheticEvent<HTMLSelectElement>) => {
@@ -102,7 +103,7 @@ const urls = [
   'https://instagr.am/p/LJ2tq9AUaO/'
 ];
 
-const getCode = (url: string, maxWidth: string, hideCaption: boolean) => `<InstagramEmbed
+const getCode = (url: string, maxWidth: number, hideCaption: boolean) => `<InstagramEmbed
   clientAccessToken='<appId>|<clientToken>'
   url='${url}'
   maxWidth={${maxWidth}}
