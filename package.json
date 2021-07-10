@@ -46,19 +46,6 @@
     "url": "https://github.com/sugarshin/react-instagram-embed/issues"
   },
   "homepage": "https://github.com/sugarshin/react-instagram-embed#readme",
-  "ava": {
-    "require": [
-      "@babel/register",
-      "raf/polyfill",
-      "./test/helpers/setup-browser-env.js"
-    ]
-  },
-  "nyc": {
-    "all": true,
-    "include": [
-      "src/**/*.js"
-    ]
-  },
   "peerDependencies": {
     "react": "^17.0.0 || ^16.0.0 || ^15.0.0 || ~0.14.0",
     "react-dom": "^17.0.0 || ^16.0.0 || ^15.0.0 || ~0.14.0"
