@@ -17,11 +17,11 @@
   "scripts": {
     "prepare": "npx is-ci || husky install",
     "lint-staged": "lint-staged",
-    "lint:eslint": "eslint '**/*.{ts,js}'",
-    "fix:eslint": "npm run lint:eslint --fix",
-    "_prettier": "prettier '**/*.{ts,js}'",
-    "lint:prettier": "npm run _prettier --check",
-    "fix:prettier": "npm run _prettier --write",
+    "lint:eslint": "eslint '**/*.{ts,tsx,js}'",
+    "fix:eslint": "npm run lint:eslint -- --fix",
+    "_prettier": "prettier '**/*.{ts,tsx,js}'",
+    "lint:prettier": "npm run _prettier -- --check",
+    "fix:prettier": "npm run _prettier -- --write",
     "typecheck": "tsc --noEmit",
     "dev": "webpack serve --config webpack.config.dev.ts",
     "clean:lib": "if [ -d lib ]; then rm -rf lib; fi",
@@ -92,5 +92,8 @@
     "webpack": "5.44.0",
     "webpack-cli": "4.7.2",
     "webpack-dev-server": "3.11.2"
+  },
+  "dependencies": {
+    "type-fest": "^1.2.2"
   }
 }

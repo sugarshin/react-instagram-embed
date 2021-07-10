@@ -63,6 +63,9 @@ jobs:
             npm run lint:eslint
             npm run lint:prettier
       - run:
+          name: Typecheck
+          command: npm run typecheck
+      - run:
           name: Test
           command: npm test
 

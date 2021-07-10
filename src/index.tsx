@@ -1,38 +1,18 @@
 import * as React from 'react';
 import { stringify } from 'querystring';
+import { SetRequired } from 'type-fest';
 
-export interface Props<T = 'div'> {
-  url: string;
-  clientAccessToken: string;
+interface DefaultProps<T extends React.ElementType = 'div'> {
   hideCaption: boolean;
   containerTagName: T;
   protocol: string;
   injectScript: boolean;
-  maxWidth?: number;
-  className?: string; // TODO:
-  onLoading?(): void;
-  onSuccess?(response: Response): void;
-  onAfterRender?(): void;
-  onFailure?(arg: any): void;
 }
 
 type Html = string;
 
 interface Response {
-  version: string;
-  title: string;
-  author_name: string;
-  author_url: string;
-  author_id: number;
-  media_id: string;
-  provider_name: 'Instagram';
-  provider_url: string;
-  type: string; // "rich"
-  width: number | null;
-  height: number | null;
   html: Html;
-  thumbnail_width: number;
-  thumbnail_height: number;
 }
 
 interface State {
@@ -44,23 +24,36 @@ interface RequestPromise {
   cancel(): void;
 }
 
-export default class InstagramEmbed extends React.PureComponent<Props, State> {
-  public static defaultProps = {
+type PropsInternal = SetRequired<Props, keyof DefaultProps>;
+
+export interface Props<T extends React.ElementType = 'div'> extends Partial<DefaultProps<T>> {
+  url: string;
+  clientAccessToken: string;
+  maxWidth?: number;
+  className?: string;
+  onLoading?(): void;
+  onSuccess?(response: Response): void;
+  onAfterRender?(): void;
+  onFailure?(error: Error): void;
+}
+
+export default class InstagramEmbed extends React.Component<PropsInternal, State> {
+  public static defaultProps: DefaultProps = {
     hideCaption: false,
     containerTagName: 'div',
     protocol: 'https:',
-    injectScript: true
+    injectScript: true,
   };
 
   private request: RequestPromise | null = null;
   private timer?: number;
 
-  constructor(props: Props) {
+  constructor(props: PropsInternal) {
     super(props);
     this.state = { html: null };
   }
 
-  public componentDidMount() {
+  componentDidMount(): void {
     if (window.instgrm) {
       this.fetchEmbed(this.getQueryParams(this.props));
     } else {
@@ -73,26 +66,28 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     }
   }
 
-  public componentDidUpdate(prevProps: Props) {
-    const { url, hideCaption, maxWidth, containerTagName } = this.props;
+  componentDidUpdate(prevProps: PropsInternal): void {
+    const { url, clientAccessToken, hideCaption, maxWidth, containerTagName, className } = this.props;
     if (
       prevProps.url !== url ||
+      prevProps.clientAccessToken !== clientAccessToken ||
       prevProps.hideCaption !== hideCaption ||
       prevProps.maxWidth !== maxWidth ||
-      prevProps.containerTagName !== containerTagName
+      prevProps.containerTagName !== containerTagName ||
+      prevProps.className !== className
     ) {
       (this.request as RequestPromise).cancel();
       this.fetchEmbed(this.getQueryParams(this.props));
     }
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount(): void {
     this.cancel();
   }
 
   public render(): React.ReactNode {
-    const Tag = this.props.containerTagName;
-    return <Tag {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.html || '' }} />;
+    const Element = this.props.containerTagName;
+    return <Element {...this.omitComponentProps()} dangerouslySetInnerHTML={{ __html: this.state.html || '' }} />;
   }
 
   // Public
@@ -114,6 +109,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
 
   private omitComponentProps() {
     const {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       url,
       clientAccessToken,
       hideCaption,
@@ -125,6 +121,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
       onFailure,
       protocol,
       injectScript,
+      /* eslint-enable @typescript-eslint/no-unused-vars */
       ...rest
     } = this.props;
     return rest;
@@ -144,7 +141,7 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
   }
 
   private checkAPI(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       (function checkAPI(self: InstagramEmbed) {
         self.timer = window.setTimeout(() => {
           if (window.instgrm) {
@@ -158,24 +155,20 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     });
   }
 
-  private getQueryParams({
-    url,
-    clientAccessToken,
-    hideCaption,
-    maxWidth
-  }: {
-    url: string;
-    clientAccessToken: string;
-    hideCaption: boolean;
-    maxWidth?: number;
-  }): string {
-    return stringify({
+  private getQueryParams({ url, hideCaption, maxWidth }: PropsInternal): string {
+    const query: { url: string; hidecaption: boolean; omitscript: true; fields: 'html'; maxwidth?: number } = {
       url,
-      access_token: clientAccessToken,
       hidecaption: hideCaption,
-      maxwidth: typeof maxWidth === 'number' && maxWidth >= 320 ? maxWidth : undefined,
-      omitscript: true
-    });
+      omitscript: true,
+      fields: 'html',
+    };
+
+    // "The request parameter 'maxwidth' must be an integer between 320 and 658."
+    if (typeof maxWidth === 'number' && 320 <= maxWidth && maxWidth <= 658) {
+      query.maxwidth = maxWidth;
+    }
+
+    return stringify(query);
   }
 
   private handleFetchSuccess = (response: Response): void => {
@@ -191,10 +184,10 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     });
   };
 
-  private handleFetchFailure = (...args: any[]): void => {
+  private handleFetchFailure = (error: Error): void => {
     clearTimeout(this.timer);
     if (this.props.onFailure) {
-      this.props.onFailure(args);
+      this.props.onFailure(error);
     }
   };
 
@@ -202,10 +195,14 @@ export default class InstagramEmbed extends React.PureComponent<Props, State> {
     const request = {} as RequestPromise;
 
     request.promise = new Promise((resolve, reject) => {
-      const promise = fetch(url)
-        .then(response => response.json())
-        .then(json => resolve(json))
-        .catch(err => reject(err));
+      const promise = fetch(url, {
+        headers: {
+          Authorization: `Bearer ${this.props.clientAccessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => resolve(json))
+        .catch((err) => reject(err));
 
       request.cancel = () => reject(new Error('Cancelled'));
       return promise;
