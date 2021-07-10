@@ -95,9 +95,7 @@ jobs:
       - restore_node_modules
       - run:
           name: Build Demo
-          command: |
-            npm run build:demo
-            curl https://sugarshin.net/favicon.ico > $DIR/favicon.ico
+          command: npm run build:demo
           environment:
             NODE_ENV: production
       - store_artifacts:

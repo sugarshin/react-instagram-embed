@@ -42,7 +42,7 @@ const config: Configuration = {
   cache: true,
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.mjs'],
