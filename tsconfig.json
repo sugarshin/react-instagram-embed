@@ -8,6 +8,7 @@
     "jsx": "react",
     "lib": ["es2015", "dom"],
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
