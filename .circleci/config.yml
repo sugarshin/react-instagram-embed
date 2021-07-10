@@ -112,6 +112,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: *workspace_root
+      - add_ssh_keys:
+          fingerprints:
+            - 'e4:52:fe:79:78:b0:cc:37:b6:3a:dd:71:8b:ca:49:9c'
       - add_npmrc
       - run:
           name: Publish package to npm and tagging
