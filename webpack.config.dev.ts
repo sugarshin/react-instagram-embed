@@ -22,6 +22,6 @@ const config = {
     },
   },
   devServer,
-}
+};
 
 export default config;

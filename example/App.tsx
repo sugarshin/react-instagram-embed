@@ -35,7 +35,7 @@ class App extends Component<Record<string, never>, State> {
         <div
           className="body"
           style={{
-            maxWidth: this.state.maxWidth ? `${this.state.maxWidth}px` : 'auto'
+            maxWidth: this.state.maxWidth ? `${this.state.maxWidth}px` : 'auto',
           }}
         >
           <h1>React Instagram Embed</h1>
@@ -58,7 +58,7 @@ class App extends Component<Record<string, never>, State> {
           <div className="ui">
             <span className="ui-label">Select photo</span>
             <select value={this.state.url} onChange={this.hanldeURLSelect}>
-              {urls.map(u => (
+              {urls.map((u) => (
                 <option value={u} key={u}>
                   {u}
                 </option>
@@ -74,13 +74,11 @@ class App extends Component<Record<string, never>, State> {
   }
 
   private highlight() {
-    [...document.querySelectorAll('pre code')].forEach(el => hljs.highlightElement(el as HTMLElement));
+    [...document.querySelectorAll('pre code')].forEach((el) => hljs.highlightElement(el as HTMLElement));
   }
 
   private handleMaxWidthChange = () => {
-    const maxWidth = this.numberInputRef.current.value
-      ? parseInt(this.numberInputRef.current.value, 10)
-      : undefined;
+    const maxWidth = this.numberInputRef.current.value ? parseInt(this.numberInputRef.current.value, 10) : undefined;
     console.log('maxWidth', maxWidth);
     this.setState({ maxWidth });
   };
@@ -100,7 +98,7 @@ const urls = [
   'https://instagr.am/p/Zn1Xz/',
   'https://instagr.am/p/HLLj2RgURT/',
   'https://instagr.am/p/HeZ7IxgUUc/',
-  'https://instagr.am/p/LJ2tq9AUaO/'
+  'https://instagr.am/p/LJ2tq9AUaO/',
 ];
 
 const getCode = (url: string, maxWidth: number, hideCaption: boolean) => `<InstagramEmbed

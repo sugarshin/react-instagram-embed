@@ -141,7 +141,7 @@ export default class InstagramEmbed extends React.Component<PropsInternal, State
   }
 
   private checkAPI(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       (function checkAPI(self: InstagramEmbed) {
         self.timer = window.setTimeout(() => {
           if (window.instgrm) {
@@ -155,11 +155,7 @@ export default class InstagramEmbed extends React.Component<PropsInternal, State
     });
   }
 
-  private getQueryParams({
-    url,
-    hideCaption,
-    maxWidth
-  }: PropsInternal): string {
+  private getQueryParams({ url, hideCaption, maxWidth }: PropsInternal): string {
     const query: { url: string; hidecaption: boolean; omitscript: true; fields: 'html'; maxwidth?: number } = {
       url,
       hidecaption: hideCaption,
@@ -199,17 +195,14 @@ export default class InstagramEmbed extends React.Component<PropsInternal, State
     const request = {} as RequestPromise;
 
     request.promise = new Promise((resolve, reject) => {
-      const promise = fetch(
-        url,
-        {
-          headers: {
-            Authorization: `Bearer ${this.props.clientAccessToken}`,
-          },
+      const promise = fetch(url, {
+        headers: {
+          Authorization: `Bearer ${this.props.clientAccessToken}`,
         },
-      )
-        .then(response => response.json())
-        .then(json => resolve(json))
-        .catch(err => reject(err));
+      })
+        .then((response) => response.json())
+        .then((json) => resolve(json))
+        .catch((err) => reject(err));
 
       request.cancel = () => reject(new Error('Cancelled'));
       return promise;

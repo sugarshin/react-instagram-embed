@@ -13,19 +13,12 @@ const htmlWebpackPluginConfig = {
   favicon: 'build/favicon.ico',
 };
 
-const plugins: Configuration['plugins'] = [
-  new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined),
-];
+const plugins: Configuration['plugins'] = [new HtmlWebpackPlugin(prod ? htmlWebpackPluginConfig : undefined)];
 
 if (prod) {
-  plugins.push(
-    new webpack.EnvironmentPlugin(['INSTAGRAM_ACCESS_TOKEN']),
-  );
+  plugins.push(new webpack.EnvironmentPlugin(['INSTAGRAM_ACCESS_TOKEN']));
 } else {
-  plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
-    new DotenvWebpack()
-  );
+  plugins.push(new webpack.HotModuleReplacementPlugin(), new DotenvWebpack());
 }
 
 function mode(): Configuration['mode'] {
@@ -68,21 +61,23 @@ const config: Configuration = {
       },
     ],
   },
-  ...(prod ? {
-    optimization: {
-      splitChunks: {
-        maxSize: 244000,
-        cacheGroups: {
-          vendor: {
-            test: /node_modules/,
-            name: 'vendor',
-            chunks: 'initial',
-            enforce: true,
+  ...(prod
+    ? {
+        optimization: {
+          splitChunks: {
+            maxSize: 244000,
+            cacheGroups: {
+              vendor: {
+                test: /node_modules/,
+                name: 'vendor',
+                chunks: 'initial',
+                enforce: true,
+              },
+            },
           },
         },
-      },
-    },
-  } : {}),
+      }
+    : {}),
 };
 
 export default config;
