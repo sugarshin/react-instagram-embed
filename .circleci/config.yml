@@ -11,7 +11,7 @@ executors:
   nodejs:
     working_directory: *workspace_root
     docker:
-      - image: cimg/node:14.17.3
+      - image: cimg/node:16.4.1
 
 commands:
   restore_npm_cache:
