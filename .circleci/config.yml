@@ -115,7 +115,7 @@ jobs:
       - add_npmrc
       - run:
           name: Publish package to npm and tagging
-          command: /bin/bash .circleci/publish-and-tagging.sh
+          command: /bin/bash .circleci/publish_and_tagging.sh
 
 workflows:
   test_build_deploy_publish:
@@ -128,6 +128,8 @@ workflows:
           requires:
             - test
       - gh-pages/deploy:
+          executor:
+            name: nodejs
           build-dir: build
           workspace-root: *workspace_root
           ssh-fingerprints: 'e4:52:fe:79:78:b0:cc:37:b6:3a:dd:71:8b:ca:49:9c'
