@@ -1,42 +1,51 @@
 version: 2.1
 
+orbs:
+  gh-pages: sugarshin/gh-pages@0.0.6
+
 references:
-  workspace_root: &workspace_root
-      ~/workspace
+  workspace_root: &workspace_root ~/workspace
+  NODE_MODULES_CACHE_KEY: &NODE_MODULES_CACHE_KEY v1-dependencies-{{ arch }}-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_WORKSPACE_ID }}-{{ checksum "package-lock.json" }}-node-modules
 
 executors:
   nodejs:
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:10.22.0
+      - image: cimg/node:14.17.3
 
 commands:
-  restore_deps:
+  restore_npm_cache:
     steps:
       - restore_cache:
-          name: Restore Cache - Dependency Modules
+          name: Restore npm cache
           keys:
-            - v1-npm-deps-{{ checksum "package-lock.json" }}
-            - v1-npm-deps-
-  save_deps:
+            - v1-npm-cache-{{ checksum "package-lock.json" }}
+            - v1-npm-cache-
+  save_npm_cache:
     steps:
       - save_cache:
-          name: Save Cache - Dependency Modules
-          key: v1-npm-deps-{{ checksum "package-lock.json" }}
+          name: Save npm cache
+          key: v1-npm-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./node_modules
+            - ~/.npm
+  restore_node_modules:
+    steps:
+      - restore_cache:
+          name: Restore node_modules
+          keys:
+            - *NODE_MODULES_CACHE_KEY
+  save_node_modules:
+    steps:
+      - save_cache:
+          name: Save node_modules
+          key: *NODE_MODULES_CACHE_KEY
+          paths:
+            - node_modules
   add_npmrc:
     steps:
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
-  configure_git:
-    steps:
-      - run:
-          name: Configure Git
-          command: |
-            git config --global user.name 'CircleCI'
-            git config --global user.email 's+circleci@sugarshin.net'
 
 jobs:
   test:
@@ -44,12 +53,15 @@ jobs:
       name: nodejs
     steps:
       - checkout
-      - restore_deps
-      - run: npm install
-      - save_deps
+      - restore_npm_cache
+      - run: npm ci
+      - save_npm_cache
+      - save_node_modules
       - run:
           name: Lint
-          command: npm run lint
+          command: |
+            npm run lint:eslint
+            npm run lint:prettier
       - run:
           name: Test
           command: npm test
@@ -59,26 +71,39 @@ jobs:
       name: nodejs
     steps:
       - checkout
-      - restore_deps
-      - run: npm install
-      - save_deps
-      - run: NODE_ENV=production npm run compile
+      - restore_node_modules
+      - run:
+          name: Compile
+          command: npm run compile
+          environment:
+            NODE_ENV: production
+      - store_artifacts:
+          path: lib
+      - store_artifacts:
+          path: es
       - persist_to_workspace:
           root: *workspace_root
           paths:
             - lib
             - es
 
-  deploy_demo:
+  build_demo:
     executor:
       name: nodejs
     steps:
       - checkout
-      - restore_deps
-      - run: npm install
-      - save_deps
-      - configure_git
-      - run: /bin/bash .circleci/publish-demo.sh
+      - restore_node_modules
+      - run:
+          name: Build Demo
+          command: npm run build:demo
+          environment:
+            NODE_ENV: production
+      - store_artifacts:
+          path: build
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - build
 
   publish:
     executor:
@@ -96,17 +121,25 @@ workflows:
   test_build_deploy_publish:
     jobs:
       - test
-      - build
-      - deploy_demo:
+      - build:
           requires:
             - test
-            - build
+      - build_demo:
+          requires:
+            - test
+      - gh-pages/deploy:
+          build-dir: build
+          workspace-root: *workspace_root
+          ssh-fingerprints: 'e4:52:fe:79:78:b0:cc:37:b6:3a:dd:71:8b:ca:49:9c'
+          git-user: CircleCI
+          git-email: s+circleci@sugarshin.net
+          requires:
+            - build_demo
           filters:
             branches:
               only: master
       - publish:
           requires:
-            - test
             - build
           filters:
             branches:

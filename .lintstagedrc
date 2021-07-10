@@ -1,7 +1,0 @@
-{
-  "*.{ts,tsx}": [
-    "prettier --write",
-    "npm run lint:lint-staged",
-    "git add"
-  ]
-}
