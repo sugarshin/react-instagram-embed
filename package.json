@@ -59,7 +59,7 @@
     "@hot-loader/react-dom": "17.0.1",
     "@types/dotenv-webpack": "7.0.3",
     "@types/jest": "26.0.24",
-    "@types/node": "14.17.6",
+    "@types/node": "14.17.7",
     "@types/react": "17.0.15",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",
