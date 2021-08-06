@@ -94,6 +94,6 @@
     "webpack-dev-server": "3.11.2"
   },
   "dependencies": {
-    "type-fest": "^1.2.2"
+    "type-fest": "^2.0.0"
   }
 }
