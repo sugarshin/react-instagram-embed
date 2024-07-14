@@ -64,7 +64,7 @@
     "@types/react-dom": "17.0.25",
     "@types/react-test-renderer": "17.0.9",
     "@types/webpack": "5.28.5",
-    "@types/webpack-dev-server": "3.11.6",
+    "@types/webpack-dev-server": "4.7.2",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "babel-loader": "8.3.0",
